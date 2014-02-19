@@ -10,4 +10,5 @@ response = urllib.request.urlopen(url)
 content = response.read().decode(response.headers.get_content_charset())
 JSONdata = json.loads(content)
 
-print(JSONdata["data"][0]["message"])
+for statusUpdate in JSONdata["data"]:
+    print(statusUpdate["message"])
