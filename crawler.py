@@ -7,5 +7,7 @@ token = "CAACEdEose0cBAPcZArCo6JfiyfbM528GnIf1IwQOroc1Cfs4V3KHdMhMyQsoUUhRRbXLBI
 url = "https://graph.facebook.com/"+username+"/feed?access_token="+token
 
 response = urllib.request.urlopen(url)
-JSONdata = json.loads(response.read())
+content = response.read().decode(response.headers.get_content_charset())
+JSONdata = json.loads(content)
 
+print(JSONdata["data"][0]["message"])
