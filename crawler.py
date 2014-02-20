@@ -1,14 +1,33 @@
 import urllib.request
 import json
+import csv
 
-username = "arjen.swellengrebel"
-token = "CAACEdEose0cBAPcZArCo6JfiyfbM528GnIf1IwQOroc1Cfs4V3KHdMhMyQsoUUhRRbXLBIM3PdfWZBjZC7WQ3XBEoDAoPLr8SeqMx3gm01f1j9AxCFTGM8xKF6NGV9Jh5H7goxkyVOVjKgypHxGzsvoRNMjDP568pCTzecsQg6tp30EYGMd62gqsESnFagZBqR0ZB1gv36QZDZD"
+def crawl( username, token ):
 
-url = "https://graph.facebook.com/"+username+"/feed?access_token="+token
+    url = "https://graph.facebook.com/"+username+"/feed?access_token="+token
+    
+    response = urllib.request.urlopen(url)
+    content = response.read().decode(response.headers.get_content_charset())
+    JSONdata = json.loads(content)
 
-response = urllib.request.urlopen(url)
-content = response.read().decode(response.headers.get_content_charset())
-JSONdata = json.loads(content)
-
-for statusUpdate in JSONdata["data"]:
-    print(statusUpdate["message"])
+    with open('real-data.csv', 'w', newline='') as csvFile:
+        csvWriter = csv.writer(csvFile)
+        csvWriter.writerow(["Link Title","Message","Time Posted (PST)",
+                            "# Likes","# Shares","Has Question?",
+                            "Update Type","Link URL","Post URL"])
+        for statusUpdate in JSONdata["data"]:
+            title = statusUpdate["actions"][0]["name"]
+            message = statusUpdate["message"]
+            time = statusUpdate["created_time"]
+            if "likes" in statusUpdate:
+                likes = len(statusUpdate["likes"]["data"])
+            else: likes = 0
+            if "shares" in statusUpdate:
+                shares = len(statusUpdate["shares"]["data"])
+            else: shares = 0
+            question = "Figure it out yourself"
+            updateType = statusUpdate["type"]
+            link = statusUpdate["link"]
+            postURL = statusUpdate["actions"][0]["link"]
+            csvWriter.writerow([title,message,time,likes,shares,question,
+                                updateType,link,postURL])
