@@ -3,6 +3,8 @@ import json
 import csv
 
 def crawl( username, token, limit ):
+
+    username = turnUsernameIntoId(username)
     
     # Make a csv file on disk
     csvFile = open('real-data.csv', 'w', newline='')
@@ -12,10 +14,11 @@ def crawl( username, token, limit ):
                         "Update Type","Link URL","Post URL"])
     
     # Create the URL needed
-    url = "https://graph.facebook.com/"+username+"/feed?limit="+str(limit)+"&fields=message,created_time,shares,comments.limit(1).summary(true),type,link,actions,likes.limit(1).summary(true)&access_token="+token
+    url = "https://graph.facebook.com/"+username+"/feed?limit="+str(limit)+"&fields=message,created_time,shares,from,comments.limit(1).summary(true),type,link,actions,likes.limit(1).summary(true)&access_token="+token
 
     while( True ):
-        
+
+        print(url)
         response = urllib.request.urlopen(url)
         content = response.read().decode(response.headers.get_content_charset())
         JSONdata = json.loads(content)
@@ -36,7 +39,8 @@ def crawl( username, token, limit ):
             if "actions" in statusUpdate: postURL = statusUpdate["actions"][0]["link"]
             else: postURL = ""
             # Write the data to the file
-            csvWriter.writerow([message,time,likes,shares,comments,updateType,linkURL,postURL])
+            if statusUpdate["from"]["id"] == username:
+                csvWriter.writerow([message,time,likes,shares,comments,updateType,linkURL,postURL])
 
         if "paging" in JSONdata: url = JSONdata["paging"]["next"]
         else: break
@@ -45,3 +49,11 @@ def extractNumber(category, statusUpdate):
     if category in statusUpdate: number = statusUpdate[category]["summary"]["total_count"]
     else: number = 0
     return number
+
+def turnUsernameIntoId(username):
+    url = "https://graph.facebook.com/"+username+"?fields=id"
+    response = urllib.request.urlopen(url)
+    content = response.read().decode(response.headers.get_content_charset())
+    JSONdata = json.loads(content)
+    return JSONdata["id"]
+
