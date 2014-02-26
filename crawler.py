@@ -8,8 +8,8 @@ def crawl( username, token, limit ):
     
     # Make a csv file on disk
     csvFile = open('real-data.csv', 'w', newline='')
-    csvWriter = csv.writer(csvFile)
-    csvWriter.writerow(["Message","Time Posted",
+    csvWriter = csv.writer(csvFile, quotechar = '|')
+    csvWriter.writerow(["Message","Message Length","Time Posted",
                         "# Likes","# Shares","# Comments",
                         "Update Type","Link URL","Post URL"])
     
@@ -18,7 +18,7 @@ def crawl( username, token, limit ):
 
     while( True ):
 
-        print(url)
+        print("Next page being processed.")
         response = urllib.request.urlopen(url)
         content = response.read().decode(response.headers.get_content_charset())
         JSONdata = json.loads(content)
@@ -28,6 +28,7 @@ def crawl( username, token, limit ):
             # Retrieve all the relevant data from this status update
             if "message" in statusUpdate: message = statusUpdate["message"].encode('ascii','ignore')
             else: message = ""
+            messageLength = len(message.split())
             time = statusUpdate["created_time"]
             likes = extractNumber("likes", statusUpdate)
             if "shares" in statusUpdate: shares = statusUpdate["shares"]["count"]
@@ -35,12 +36,12 @@ def crawl( username, token, limit ):
             comments = extractNumber("comments", statusUpdate)
             updateType = statusUpdate["type"]
             if "link" in statusUpdate: linkURL = statusUpdate["link"]
-            else: link = ""
+            else: linkURL = ""
             if "actions" in statusUpdate: postURL = statusUpdate["actions"][0]["link"]
             else: postURL = ""
             # Write the data to the file
             if statusUpdate["from"]["id"] == username:
-                csvWriter.writerow([message,time,likes,shares,comments,updateType,linkURL,postURL])
+                csvWriter.writerow([message,messageLength,time,likes,shares,comments,updateType,linkURL,postURL])
 
         if "paging" in JSONdata: url = JSONdata["paging"]["next"]
         else: break
