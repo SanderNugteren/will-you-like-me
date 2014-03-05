@@ -46,6 +46,68 @@ def crawl( username, token, limit ):
         if "paging" in JSONdata: url = JSONdata["paging"]["next"]
         else: break
 
+def crawlFriends( username, token ):
+
+    username = turnUsernameIntoId(username)
+    
+    # Make a csv file with the users friends
+    csvFile = open('friends.csv', 'w')
+    csvWriter = csv.writer(csvFile, quotechar = '|')
+    csvWriter.writerow(["friend_id","name"])
+    
+    # Create the URL needed
+    url = "https://graph.facebook.com/"+username+"/?fields=name,id,friends&access_token="+token
+
+    # Create list for id's to get friends of friends later
+    friends_id_list = []
+	
+    while( True ):
+
+        print("Processing friends...")
+        response = urllib2.urlopen(url)
+        content = response.read().decode(response.headers.get('Content-Type', '').split("=")[1])
+        JSONdata = json.loads(content)
+		
+        # Open the data in this JSON file
+        for friends in JSONdata["friends"]["data"]:
+            
+            # Retrieve all the relevant data
+            name =  friends["name"].encode('ascii','ignore') #encoding to ascii loses special characters
+            print name
+            friend_id =  friends["id"]
+            friends_id_list.append(friend_id)
+            csvWriter.writerow([friend_id, name])
+					
+        if "paging" in JSONdata: url = JSONdata["paging"]["next"]
+        else: break		
+    
+    # Create a csv file for the friends of a friend
+    csvFile.close()
+    csvFile = open('foaf.csv', 'w')
+    csvWriter = csv.writer(csvFile, quotechar = '|')
+    csvWriter.writerow(["friend_id","name","user_id"])
+	
+    # Using the friend id's of the user to get the friends of the users friends. THIS ONLY WORKS FOR PUBLIC PROFILES, unfortunately
+    for ids in range(len(friends_id_list)):
+	    
+        # Try to get the friends of a friend 
+        try:
+            friends_url = "https://graph.facebook.com/"+friends_id_list[ids]+"/?fields=name,id,friends&access_token="+token
+            print "friend URL: ",ids+1,"/",len(friends_id_list)," ",friends_url,"\n"
+            response = urllib2.urlopen(friends_url)
+            content = response.read().decode(response.headers.get('Content-Type', '').split("=")[1])
+            JSONfriendData = json.loads(content)
+            
+            # Add the friends to the friends of a friend (foaf) file
+            for foaf in JSONfriendData["friends"]["data"]:
+                print foaf["name"]
+                friend = foaf["name"].encode('ascii','ignore') # this fails (in windows command prompt, not in IDLE)when the string contains unicode that is unknown
+                id = friends["id"]
+                csvWriter.writerow([id, friend,friends_id_list[ids]])
+        except:
+            print "Not a public FB profile (or ascii error in windows command prompt)"
+            pass
+
 def extractNumber(category, statusUpdate):
     if category in statusUpdate: number = statusUpdate[category]["summary"]["total_count"]
     else: number = 0
