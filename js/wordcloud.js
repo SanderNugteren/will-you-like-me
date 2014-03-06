@@ -1,13 +1,13 @@
 var fill = d3.scale.category20();
 
-var width = 900,
-	height = 500;
+var width = 450,
+	height = 200;
 	
 var wordsArray = [];
 var weightsArray = [];
 var wordObjects = [];
 
-var svgbody = d3.select("body")//create this 'shortcut-variable', so I don't have to type this code over and over again
+var svgbody = d3.select("#wordcloud")//create this 'shortcut-variable', so I don't have to type this code over and over again
 	.append("svg")
 	.attr("width", width)
 	.attr("height", height)
@@ -33,7 +33,7 @@ d3.layout.cloud().size([width, height])
 	}))
 	
 	//determine the angle of a word here (change 90 into 0 to not rotate any words)
-	.rotate(function() { return ~~(Math.random() * 2) * 90; })
+	.rotate(0)
 	.font("Impact")
 	.fontSize(function(d) { return d.size; })
 	.on("end", function(k){
@@ -61,7 +61,7 @@ d3.layout.cloud().size([width, height])
 	.start();
 
 
-d3.select("body")
+d3.select("#wordcloud")
 	.on("click", function(k) {
 	
 		var input = [["cat",0.9], ["dog",0.3], ["puppy",0.6], ["Rens",0.2], ["Arjen",0.2], ["Benjamin",0.2], ["Harriëtte",0.2],["Sander",0.2],
@@ -82,7 +82,7 @@ d3.select("body")
 			}))
 			
 			//determine the angle of a word here (change 90 into 0 to not rotate any words)
-			.rotate(function() { return ~~(Math.random() * 2) * 90; })
+			.rotate(0)
 			.font("Impact")
 			.fontSize(function(d) { return d.size; })
 			.on("end", function(k){

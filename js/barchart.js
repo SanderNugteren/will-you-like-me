@@ -11,13 +11,13 @@ console.dir(dataset);
 	// default year
 	sub = 2010;
 	
-	var w = 600;
-	var h = 400;
+	var w = 450;
+	var h = 200;
 	var padding = 20;
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	var barPadding = w / dataset.length / 12;
 	
-	var svg = d3.select("body")
+	var barchart = d3.select("#barchart")
 		.append("svg")
 		.attr("width", w)
 		.attr("height", h);
@@ -35,7 +35,7 @@ console.dir(dataset);
 		.orient("bottom")
 		.ticks(5);
 	
-	svg.selectAll("rect")
+	barchart.selectAll("rect")
 		.data(dataset)
 		.enter()
 		.append("rect")
@@ -54,7 +54,7 @@ console.dir(dataset);
 		})
 		.style("fill", function(d, i) { return fill(i); });
 		
-	svg.selectAll("text.value")
+	barchart.selectAll("text.value")
 		.data(dataset)
 		.enter()
 		.append("text")
@@ -75,7 +75,7 @@ console.dir(dataset);
 		.attr("font-family", "Courier")
 		.attr("font-size", "12px");
 		
-	svg.selectAll("text.name")
+	barchart.selectAll("text.name")
 		.data(dataset)
 		.enter()
 		.append("text")
@@ -96,7 +96,7 @@ console.dir(dataset);
 		.attr("font-family", "Courier")
 		.attr("font-size", "14px");
 		
-	svg.append("text")
+	barchart.append("text")
 		.attr("class", "year")
 		.text(function() {
 			return dataset.length;
@@ -107,13 +107,13 @@ console.dir(dataset);
 		.attr("font-family", "Arial")
 		.attr("font-size", "40px");
 	
-	svg.append("g")
+	barchart.append("g")
 		.attr("class", "axis")
 		.attr("transform", "translate(20," + (h - padding) + ")")
 		.call(xAxis);
 		
 	// update on keypress
-	d3.select("body")
+	d3.select("#barchart")
 		.on("click", function(k) {
 			// update if year exists
 
@@ -142,7 +142,7 @@ console.dir(dataset);
 				return b.value - a.value;
 			};
 			
-			var rects = svg.selectAll("rect")
+			var rects = barchart.selectAll("rect")
 				.data(dataset);
 			
 			// bars
@@ -175,7 +175,7 @@ console.dir(dataset);
 				.remove();
 
 			// values
-			var values = svg.selectAll("text.value")
+			var values = barchart.selectAll("text.value")
 				.data(dataset);
 				
 			values.enter().append("text")
@@ -202,7 +202,7 @@ console.dir(dataset);
 				.remove();
 
 			// names
-			var names = svg.selectAll("text.name")
+			var names = barchart.selectAll("text.name")
 				.data(dataset);
 				
 			names.enter().append("text")
@@ -234,12 +234,12 @@ console.dir(dataset);
 							
 
 							
-						svg.select("text.year")
+						barchart.select("text.year")
 							.text(function() {
 								return dataset.length;
 							});
 
-						svg.select("g")
+						barchart.select("g")
 							.data(dataset)
 							.transition()
 							.duration(1000)
