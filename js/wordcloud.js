@@ -48,6 +48,9 @@ d3.layout.cloud().size([width, height])
 		.enter().append("text")
 			.transition()
 			.duration(1000)
+			.delay(function(d,i) {
+				return i * 50;
+			})
 			.style("font-size", function(d) { return d.size + "px"; })
 			.style("font-family", "Impact")
 			.style("fill", function(d, i) { return fill(i); })//determine word color here

@@ -9,7 +9,7 @@
 #network .foaf { 
   fill: #999;
   stroke: #7689B5;
-  stroke-width: 5px;
+  stroke-width: 4px;
 }
 
 #network .like {
@@ -21,13 +21,13 @@
 #network .nolike { 
   fill: #999;
   stroke: #7689B5;
-  stroke-width: 5px;
+  stroke-width: 4px;
 }
 
 #network .ignored { 
   fill: #999;
   stroke: #DDD;
-  stroke-width: 5px;
+  stroke-width: 4px;
 }
 
 #network text {

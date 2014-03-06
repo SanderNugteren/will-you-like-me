@@ -6,8 +6,6 @@ for(i = 0; i < 10;i++) {
 	dataset[i] = Math.floor((Math.random()*100)+1);
 }
 
-console.dir(dataset);
-
 	// default year
 	sub = 2010;
 	

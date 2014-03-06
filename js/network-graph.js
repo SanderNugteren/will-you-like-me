@@ -32,8 +32,8 @@ var force = d3.layout.force()
 	.nodes(d3.values(nodes))
 	.links(links)
 	.size([width, height])
-	.linkDistance( 30 )
-	.charge(-300)
+	.linkDistance( 20 )
+	.charge(-150)
 	.on("tick", tick)
 	.start();
 
@@ -58,11 +58,11 @@ var node = svg.selectAll(".node")
 
 node.append("circle")
 	.attr("r", function(d) { 
-		if(d.type == "nolike") { return 12; } else { return 8 } })
+		if(d.type == "nolike") { return 10; } else { return 6; } })
 	.attr("class", function(d) { return d.type });
 
 node.append("text")
-	.attr("x", 20)
+	.attr("x", 14)
 	.attr("dy", ".40em")
 	.text(function(d) { return d.name; });
 
@@ -82,12 +82,12 @@ function filter() {
   if(d3.select(this).select("circle").attr("class") == "ignored") {
 	d3.select(this).select("circle").transition()
 		.attr("class", "nolike")
-		.attr("r", 12);
+		.attr("r", 10);
   }
   else if (d3.select(this).select("circle").attr("class") == "nolike") {
 	d3.select(this).select("circle").transition()
 		.attr("class", "ignored")
-		.attr("r", 8);
+		.attr("r", 6);
   
   }
   
