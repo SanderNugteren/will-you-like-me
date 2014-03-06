@@ -12,10 +12,11 @@ def preprocess(csvFile):
         header = csvReader.next()
         allWords = set()
         postDicts = []
+        likes = []
         for row in csvReader:
-            print row[0:-1], row[-1]
             datarow = []
             #we assume the likes are in the last column of the csv
+            likes.append(row[3])
             post = row[0]
             post = re.sub('\s+', ' ', post).translate(None, string.punctuation)
             tokens = set()
@@ -27,15 +28,20 @@ def preprocess(csvFile):
             postDicts.append(postDict)
             allWords |= tokens
         allWords = list(allWords)
-        #TODO make a new header with allWords and features from header
-        for w in allWords:
-            print w
-        print len(allWords)
-        for postDict in postDicts:
+        #make a new header with allWords and features from header
+        #TODO add other features besides just the words
+        newHeader = allWords[:200]
+        newHeader.append(header[3])
+        csvWriter.writerow(newHeader)
+        #for w in allWords:
+        #    print w
+        #print len(allWords)
+        for pD in xrange(len(postDicts)):
             row = []
-            for w in allWords:
-                row.append(1.0*(w in postDict))
-            #TODO write line in output
+            for w in allWords[:200]:
+                row.append(1.0*(w in postDicts[pD]))
+            row.append(likes[pD])
+            csvWriter.writerow(row)
 
 if __name__ == '__main__':
     preprocess('real-data.csv')

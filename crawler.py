@@ -64,7 +64,7 @@ def crawlFriends( username, token ):
     while( True ):
 
         print("Processing friends...")
-        response = urllib2.urlopen(url)
+        response = urllib.request.urlopen(url)
         content = response.read().decode(response.headers.get('Content-Type', '').split("=")[1])
         JSONdata = json.loads(content)
 		
@@ -73,7 +73,6 @@ def crawlFriends( username, token ):
             
             # Retrieve all the relevant data
             name =  friends["name"].encode('ascii','ignore') #encoding to ascii loses special characters
-            print name
             friend_id =  friends["id"]
             friends_id_list.append(friend_id)
             csvWriter.writerow([friend_id, name])
@@ -93,19 +92,16 @@ def crawlFriends( username, token ):
         # Try to get the friends of a friend 
         try:
             friends_url = "https://graph.facebook.com/"+friends_id_list[ids]+"/?fields=name,id,friends&access_token="+token
-            print "friend URL: ",ids+1,"/",len(friends_id_list)," ",friends_url,"\n"
             response = urllib2.urlopen(friends_url)
             content = response.read().decode(response.headers.get('Content-Type', '').split("=")[1])
             JSONfriendData = json.loads(content)
             
             # Add the friends to the friends of a friend (foaf) file
             for foaf in JSONfriendData["friends"]["data"]:
-                print foaf["name"]
                 friend = foaf["name"].encode('ascii','ignore') # this fails (in windows command prompt, not in IDLE)when the string contains unicode that is unknown
                 id = friends["id"]
                 csvWriter.writerow([id, friend,friends_id_list[ids]])
         except:
-            print "Not a public FB profile (or ascii error in windows command prompt)"
             pass
 
 def extractNumber(category, statusUpdate):
