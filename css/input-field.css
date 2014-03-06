@@ -1,0 +1,37 @@
+.highlighter, textarea {
+	width: 400px;
+	height: 300px;
+	font-size: 10pt;
+	font-family: 'verdana';
+}
+
+.highlighter {
+	position: absolute;
+	padding: 1px;
+	margin-left: 1px;
+	color: white;
+	color: rgba(0, 0, 0, 0);
+}
+
+.highlighter span {
+	position: relative;
+	top:2px;
+}
+
+textarea {
+	position: relative;
+	background-color: transparent;
+}
+
+#likes {
+	color: #3b5998;
+}
+
+#prediction {
+	font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+	font-size: 11px;
+	background: #edeff4; 
+	width:400px; 
+	padding:4px; 
+	margin-bottom:1px;
+}

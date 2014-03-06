@@ -1,0 +1,28 @@
+			.foaf { 
+			  fill: #999;
+			  stroke: #7689B5;
+			  stroke-width: 5px;
+			}
+
+			.like {
+			  fill: #999;
+			  stroke: #9F0;
+			  stroke-width: 4px;
+			}
+			
+			.nolike { 
+			  fill: #999;
+			  stroke: #7689B5;
+			  stroke-width: 5px;
+			}
+			
+			.ignored { 
+			  fill: #999;
+			  stroke: #DDD;
+			  stroke-width: 5px;
+			}
+
+			text {
+			  font: 12px sans-serif;
+			  pointer-events: none;
+			}

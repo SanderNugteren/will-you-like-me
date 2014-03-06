@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Will You Like It?</title>
+		<script type="text/javascript" src="lib/d3.v3.js"></script>
+		<script type="text/javascript" src="lib/d3.layout.cloud.js"></script>
+		<script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/barchart.css">
+		<link rel="stylesheet" type="text/css" href="css/input-field.css">
+		<link rel="stylesheet" type="text/css" href="css/network-graph.css">
+		<link rel="stylesheet" type="text/css" href="css/wordcloud.css">
+	</head>
+	<body>
+		<div id='input'>
+			<p>Type away!</p>
+			<div class="highlighter"></div><textarea id="message" rows="8" cols="50"></textarea>
+			<div id='prediction'><img src='like.png' border='0' height='12' /> <span id='likes'>0 friends</span> will like this</div>
+		</div>
+		<div id='barchart'>
+			Barchart
+		</div>
+		<div id='wordcloud'>
+			Word Cloud
+		</div>
+		<div id='networkgraph'>
+			Network Graph
+		</div>
+	</body>
+</html>
