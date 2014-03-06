@@ -25,19 +25,20 @@ links.forEach(function(link) {
 });
 
 
-var width = 960,
-	height = 500;
+var width = 450,
+	height = 200;
 
 var force = d3.layout.force()
 	.nodes(d3.values(nodes))
 	.links(links)
 	.size([width, height])
-	.linkDistance( 100 )
+	.linkDistance( 30 )
 	.charge(-300)
 	.on("tick", tick)
 	.start();
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#network")
+	.append("svg")
 	.attr("width", width)
 	.attr("height", height);
 
@@ -57,12 +58,12 @@ var node = svg.selectAll(".node")
 
 node.append("circle")
 	.attr("r", function(d) { 
-		if(d.type == "nolike") { return 18; } else { return 12 } })
+		if(d.type == "nolike") { return 12; } else { return 8 } })
 	.attr("class", function(d) { return d.type });
 
 node.append("text")
 	.attr("x", 20)
-	.attr("dy", ".50em")
+	.attr("dy", ".40em")
 	.text(function(d) { return d.name; });
 
 function tick() {
@@ -81,12 +82,12 @@ function filter() {
   if(d3.select(this).select("circle").attr("class") == "ignored") {
 	d3.select(this).select("circle").transition()
 		.attr("class", "nolike")
-		.attr("r", 16);
+		.attr("r", 12);
   }
   else if (d3.select(this).select("circle").attr("class") == "nolike") {
 	d3.select(this).select("circle").transition()
 		.attr("class", "ignored")
-		.attr("r", 12);
+		.attr("r", 8);
   
   }
   
