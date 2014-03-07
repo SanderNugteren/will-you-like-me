@@ -2,17 +2,22 @@ var likes = 0;
 var colors = ['#F99','#9F9','#99F','#FF9','#9FF','#F9F','#FCC','#CFC','#CCF'];
 $('#message').bind('input propertychange', function() {
 	var hl = this.value.split(" ");
-	var c = 0;
+	var termCount = 0;
+	var terms = [];
+	var values = [];
 	for(i = 0; i < hl.length; i++) {
 		if(hl[i].length > 4) {
-			hl[i] = "<span style='background: " + colors[c] + "'>" + hl[i] + "</span>";
-			c++;
+			terms.push(hl[i]);
+			values.push(hl[i].length);
+			hl[i] = "<span style='background: " + colors[termCount] + "'>" + hl[i] + "</span>";
+			termCount++;
 		}
 	}
+	
 	$('.highlighter').html(hl.join(" "));
 	
-	if(likes != c * 11) {
-		jQuery({animlikes: likes}).animate({animlikes: c * 11}, {
+	if(likes != termCount * 11) {
+		jQuery({animlikes: likes}).animate({animlikes: termCount * 11}, {
 			duration: 1000,
 			easing:'swing', // can be anything
 			step: function() { // called on every step
@@ -20,6 +25,9 @@ $('#message').bind('input propertychange', function() {
 				$('#likes').text(Math.floor(this.animlikes) + " friends");
 			}
 		});
-		likes = c * 11;
+		likes = termCount * 11;
+		
+		// update barchart
+		updateBarchart(terms, values);
 	}
 });

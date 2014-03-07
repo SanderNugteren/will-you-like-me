@@ -10,3 +10,7 @@ padding:0px;
 height:100%;
 width:100%;
 }
+svg {
+	display:block;
+	margin: 0 auto;
+}

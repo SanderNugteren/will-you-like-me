@@ -9,9 +9,11 @@ for(i = 0; i < 10;i++) {
 	// default year
 	sub = 2010;
 	
-	var w = 450;
-	var h = 200;
+var w = 450;
+var h = $('#barchart').height();
 	var padding = 20;
+	var leftpadding = 100;
+	
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	var barPadding = w / dataset.length / 12;
 	
@@ -19,113 +21,31 @@ for(i = 0; i < 10;i++) {
 		.append("svg")
 		.attr("width", w)
 		.attr("height", h);
-
-	var yScale = d3.scale.linear()
-		.domain([0, dataset.length])
-		.range([padding, h - padding * 2]);
 		
-	var xScale = d3.scale.linear()
-		.domain([0, d3.max(dataset, function(d) { return d; })])
-		.range([padding, w - padding * 2]);
+	xScale = d3.scale.linear()
+		.domain([0, 10])
+		.range([leftpadding, w - padding]);
 
-	var xAxis = d3.svg.axis()
+	xAxis = d3.svg.axis()
 		.scale(xScale)
 		.orient("bottom")
 		.ticks(5);
-	
-	barchart.selectAll("rect")
-		.data(dataset)
-		.enter()
-		.append("rect")
-		.sort(function(a, b) {
-			return d3.descending(a, b);
-		})
-		.attr("y", function(d, i) {
-			return yScale(i) + barPadding;
-		})
-		.attr("x", function(d) {
-			return padding * 2;
-		})
-		.attr("height", h / dataset.length - barPadding * 2)
-		.attr("width", function(d) {
-			return xScale(d) - padding;
-		})
-		.style("fill", function(d, i) { return fill(i); });
-		
-	barchart.selectAll("text.value")
-		.data(dataset)
-		.enter()
-		.append("text")
-		.sort(function(a, b) {
-			return d3.descending(a, b);
-		})
-		.attr("class", "value")
-		.text(function(d) {
-			return d;
-		})
-		.attr("text-anchor", "middle")
-		.attr("y", function(d, i) { 
-			return yScale(i) + (h / dataset.length) / 2;
-		})
-		.attr("x", function(d) {
-			return xScale(d) + padding + 10;
-		})
-		.attr("font-family", "Courier")
-		.attr("font-size", "12px");
-		
-	barchart.selectAll("text.name")
-		.data(dataset)
-		.enter()
-		.append("text")
-		.sort(function(a, b) {
-			return d3.descending(a, b);
-		})
-		.attr("class", "name")
-		.text(function(d, i) {
-			return terms[i];
-		})
-		.attr("text-anchor", "middle")
-		.attr("y", function(d, i) { 
-			return yScale(i) + (h / dataset.length) / 2;
-		})
-		.attr("x", function(d) {
-			return 20;
-		})
-		.attr("font-family", "Courier")
-		.attr("font-size", "14px");
-		
-	barchart.append("text")
-		.attr("class", "year")
-		.text(function() {
-			return dataset.length;
-		})
-		.attr("text-anchor", "middle")
-		.attr("x", w - 110)
-		.attr("y", h - 50)
-		.attr("font-family", "Arial")
-		.attr("font-size", "40px");
-	
+
 	barchart.append("g")
 		.attr("class", "axis")
-		.attr("transform", "translate(20," + (h - padding) + ")")
+		.attr("transform", "translate(0," + (h - padding) + ")")
 		.call(xAxis);
 		
-	// update on keypress
-	d3.select("#barchart")
-		.on("click", function(k) {
-			// update if year exists
-
-			var dataset = [];
-			var terms = ["time","person","year","way","day","thing","man","world","life","hand","part","child"]
-			for(i = 0; i < Math.floor((Math.random()*8)+4);i++) {
-				dataset[i] = Math.floor((Math.random()*100)+1);
-			}
-			
+		
+function updateBarchart(terms, dataset) {
+		console.log(terms);
+			//var terms = ["time","person","year","way","day","thing","man","world","life","hand","part","child"]
+		
 			var barPadding = w / dataset.length / 12;
 	
 			xScale = d3.scale.linear()
 				.domain([0, d3.max(dataset, function(d) { return d; })])
-				.range([padding, w - padding * 2]);
+				.range([leftpadding, w - padding]);
 
 			yScale = d3.scale.linear()
 				.domain([0, dataset.length])
@@ -155,10 +75,10 @@ for(i = 0; i < 10;i++) {
 				.transition()
 				.duration(1000)
 				.attr("x", function(d, i) {
-					return padding * 2;
+					return leftpadding;
 				})
 				.attr("width", function(d) {
-					return xScale(d) - padding;
+					return xScale(d) - leftpadding;
 				})
 				.attr("y", function(d, i) {
 					return yScale(i) + barPadding;
@@ -190,7 +110,7 @@ for(i = 0; i < 10;i++) {
 					return d;
 				})
 				.attr("x", function(d) {
-					return xScale(d) + padding + 10;
+					return xScale(d) + padding - 25;
 				})
 				.attr("y", function(d, i) { 
 					return yScale(i) + (h / dataset.length) / 2;
@@ -221,26 +141,18 @@ for(i = 0; i < 10;i++) {
 					return yScale(i) + (h / dataset.length) / 2;
 				})
 				.attr("x", function(d) {
-					return 20;
-							})
-							.attr("font-family", "Courier")
-							.attr("font-size", "14px");
+					return 50;
+				})
+				.attr("font-family", "Courier")
+				.attr("font-size", "12px");
 
-							
-						names.exit()
-							.remove();
-							
-
-							
-						barchart.select("text.year")
-							.text(function() {
-								return dataset.length;
-							});
-
-						barchart.select("g")
-							.data(dataset)
-							.transition()
-							.duration(1000)
-							.attr("transform", "translate(20," + (h - 20) + ")")
-							.call(xAxis);
-					});
+			names.exit()
+				.remove();
+				
+			barchart.select("g")
+				.data(dataset)
+				.transition()
+				.duration(1000)
+				.attr("transform", "translate(0," + (h - 20) + ")")
+				.call(xAxis);
+}

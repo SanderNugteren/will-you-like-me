@@ -1,7 +1,7 @@
 var fill = d3.scale.category20();
 
-var width = 450,
-	height = 200;
+var width = $('#wordcloud').width(),
+	height = $('#wordcloud').height();
 	
 var wordsArray = [];
 var weightsArray = [];

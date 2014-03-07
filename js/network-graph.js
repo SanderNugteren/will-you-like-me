@@ -25,14 +25,14 @@ links.forEach(function(link) {
 });
 
 
-var width = 450,
-	height = 200;
+var width = $('#network').width(),
+	height = $('#network').height();
 
 var force = d3.layout.force()
 	.nodes(d3.values(nodes))
 	.links(links)
 	.size([width, height])
-	.linkDistance( 20 )
+	.linkDistance( 50 )
 	.charge(-150)
 	.on("tick", tick)
 	.start();
