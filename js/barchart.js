@@ -38,7 +38,7 @@ var h = $('#barchart').height();
 		
 		
 function updateBarchart(terms, dataset) {
-		console.log(terms);
+
 			//var terms = ["time","person","year","way","day","thing","man","world","life","hand","part","child"]
 		
 			var barPadding = w / dataset.length / 12;

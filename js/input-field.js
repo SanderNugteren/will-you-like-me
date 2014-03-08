@@ -27,7 +27,9 @@ $('#message').bind('input propertychange', function() {
 		});
 		likes = termCount * 11;
 		
-		// update barchart
+		// Update other graphs
 		updateBarchart(terms, values);
+		//updateNetwork();
+		updateWordcloud();
 	}
 });
