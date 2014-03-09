@@ -1,5 +1,5 @@
-var width = $('#wordcloud').width(),
-	height = $('#wordcloud').height();
+var width = $('#wordcloud').width() - 20,
+	height = $('#wordcloud').height() - 80;
 	
 var wordsArray = [];
 var weightsArray = [];

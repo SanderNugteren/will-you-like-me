@@ -45,5 +45,5 @@ $('#message').bind('input propertychange', function() {
 			//updateNetwork();
 			updateWordcloud();
 		}
-	}, 500);
+	}, 200);
 });

@@ -1,7 +1,7 @@
 var dataset = [];
 	
 var w = 450;
-var h = $('#barchart').height();
+var h = $('#barchart').height() - 80;
 	var padding = 20;
 	var leftpadding = 100;
 	
@@ -39,7 +39,7 @@ function updateBarchart(dataset) {
 
 			yScale = d3.scale.linear()
 				.domain([0, dataset.length])
-				.range([padding, h - padding * 2]);
+				.range([0, h - 25]);
 				
 			xAxis = d3.svg.axis()
 				.scale(xScale)
@@ -51,7 +51,7 @@ function updateBarchart(dataset) {
 			};
 			
 			var rects = barchart.selectAll("rect")
-				.data(dataset, function(d) { return d[0]; });
+				.data(dataset, function(d) { return d[2]; });
 			
 			// bars
 			rects.enter().append("rect")
@@ -83,7 +83,7 @@ function updateBarchart(dataset) {
 
 			// values
 			var values = barchart.selectAll("text.value")
-				.data(dataset, function(d) { return d[0]; });
+				.data(dataset, function(d) { return d[2]; });
 				
 			values.enter().append("text")
 				.attr("class", "value")
@@ -109,7 +109,7 @@ function updateBarchart(dataset) {
 
 			// names
 			var names = barchart.selectAll("text.name")
-				.data(dataset, function(d) { return d[0]; });
+				.data(dataset, function(d) { return d[2]; });
 				
 			names.enter().append("text")
 				.attr("class", "name")

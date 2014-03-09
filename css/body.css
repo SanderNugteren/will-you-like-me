@@ -10,7 +10,14 @@ padding:0px;
 height:100%;
 width:100%;
 }
+h2 {
+	font-family: sans-serif; 
+	font-size: 20px;
+	text-align:center;
+	line-height:20px;
+}
 svg {
 	display:block;
 	margin: 0 auto;
+	padding:10px;
 }
