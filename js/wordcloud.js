@@ -1,5 +1,3 @@
-var fill = d3.scale.category20();
-
 var width = $('#wordcloud').width(),
 	height = $('#wordcloud').height();
 	
@@ -27,10 +25,10 @@ for(var i in input){wordsArray[i]= input[i][0]};
 for(var i in input){weightsArray[i]= input[i][1]};
 
 d3.layout.cloud().size([width, height])
-	.words(wordsArray 
-	.map(function(d,i) {
+	.words(input.map(function(d,i) {
 		//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
-		return {text: d, size: weightsArray[i]*(100+(width+height)/input.length)};
+		console.log(d[0]);
+		return {text: d[0], size: d[1]*(100+(width+height)/input.length)};
 	}))
 	
 	//determine the angle of a word here (change 90 into 0 to not rotate any words)
@@ -43,7 +41,7 @@ d3.layout.cloud().size([width, height])
 		.append("g")
 			.attr("transform", "translate("+width/2+","+height/2+")")//group words in the centre of the cloud
 		.selectAll("text")
-			.data(k)
+			.data(k, function(d) { return d.text; })
 		.enter().append("text")
 			.transition()
 			.duration(1000)
@@ -76,11 +74,11 @@ function updateWordcloud() {
 	for(var i in input){weightsArray[i]= input[i][1]};
 
 	d3.layout.cloud().size([width, height])
-		.words(wordsArray 
-		.map(function(d,i) {
-			//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
-			return {text: d, size: weightsArray[i]*(100+(width+height)/input.length)};
-		}))
+	.words(input.map(function(d,i) {
+		//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
+		console.log(d[0]);
+		return {text: d[0], size: d[1]*(100+(width+height)/input.length)};
+	}))
 		
 		//determine the angle of a word here (change 90 into 0 to not rotate any words)
 		.rotate(0)
@@ -89,8 +87,7 @@ function updateWordcloud() {
 		.on("end", function(k){
 
 				var cloud = svgbody.select("g").selectAll("text")
-					.data(k);
-							
+					.data(k, function(d) { return d.text; })							
 				cloud.enter()
 					.append("text")
 			
