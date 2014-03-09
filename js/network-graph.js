@@ -26,7 +26,7 @@ links.forEach(function(link) {
 
 
 var width = $('#network').width() - 20,
-	height = $('#network').height() - 80;
+	height = $('#network').height() - 74;
 
 var force = d3.layout.force()
 	.nodes(d3.values(nodes))

@@ -1,7 +1,7 @@
 var dataset = [];
 	
 var w = 450;
-var h = $('#barchart').height() - 80;
+var h = $('#barchart').height() - 84;
 	var padding = 20;
 	var leftpadding = 100;
 	
