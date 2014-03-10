@@ -16,7 +16,7 @@ var friends = ["Philip","Benjamin","Rens","Harriette","Sander","Arjen"];
 
 function testData() {
 	var testData = [];
-	testData.push([0,"cat","dog","puppy","word","cloud","awesome","will","you","like","me","project","information","visualization","New Media","Human Centered Multimedia","Facebook","Likes","dislike","hobbies","AI","user interface","design","network","graph","photo","video","text","audio","Justin Bieber"]);
+	testData.push([0,"cat","dog","puppy","word","cloud","awesome","will","you","like","me","project","information","visualization","Media","Multimedia","Facebook","Likes","dislike","hobbies","AI","interface","design","network","graph","photo","video","text","audio","Bieber"]);
 	for(f = 0; f < friends.length; f++)
 	{
 		var friendData = [friends[f]];

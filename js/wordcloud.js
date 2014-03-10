@@ -1,10 +1,8 @@
 var width = $('#wordcloud').width() - 20,
 	height = $('#wordcloud').height() - 80;
-	
-var wordsArray = [];
-var weightsArray = [];
-var wordObjects = [];
 
+var fill = d3.scale.category20();
+	
 var svgbody = d3.select("#wordcloud")//create this 'shortcut-variable', so I don't have to type this code over and over again
 	.append("svg")
 	.attr("width", width)
@@ -20,9 +18,6 @@ var svgbody = d3.select("#wordcloud")//create this 'shortcut-variable', so I don
 				
 
 //the main function to visualize the word cloud, given certain input
-			
-for(var i in input){wordsArray[i]= input[i][0]};
-for(var i in input){weightsArray[i]= input[i][1]};
 
 d3.layout.cloud().size([width, height])
 	.words(input.map(function(d,i) {
@@ -62,19 +57,15 @@ d3.layout.cloud().size([width, height])
 
 function updateWordcloud(input) {
 
-var wordsArray = [];
-var weightsArray = [];
-var wordObjects = [];
-
-	for(var i in input){wordsArray.push(input[i][0])};
-	var maximum = d3.max(input, function(d) { return d[1]; });
-	for(var i in input){input[i][1] = input[i][1]/maximum*30};
+cloudScale = d3.scale.linear()
+	.domain([d3.min(input, function(d) { return d[1]; }), d3.max(input, function(d) { return d[1]; })])
+	.range([0, 1]);
 	
 	d3.layout.cloud()
 		.size([width, height])
 		.words(input.map(function(d,i) {
 			//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
-			return {text: d[0], size: d[1]}
+			return {text: d[0], size: cloudScale(d[1])*(50+(width+height)/input.length)}
 		}))
 		
 		//determine the angle of a word here (change 90 into 0 to not rotate any words)
