@@ -1,7 +1,6 @@
 var time = 0;
-var likes = 0;
 var dataset = [];
-
+var prevlikes = 0;
 var fill = d3.scale.category20();
 
 		// get prediction data
@@ -11,6 +10,7 @@ var fill = d3.scale.category20();
 $('#message').bind('input propertychange', function() {
 
 	var message = this;
+	var likes = 0;
 	
 	// force second timeout
 	clearTimeout(time);
@@ -18,52 +18,45 @@ $('#message').bind('input propertychange', function() {
 
 		// split message into terms
 		var terms = message.value.split(" ");
-		
-		// get sum of prediction data for each term
+
+		// match terms to data
 		var termScores = [0];
+		var termCount = 0;
+		var matchingTerms = [];
+		var nonMatchingTerms = [];
 		for(i = 1; i < data[0].length; i++)
 		{
+			//get sum of prediction data for each term
 			var score = 0;
 			for(j = 1; j < data.length; j++) {
 				score += data[j][i];
 			}
 			termScores.push(Math.round(score*100)/100);
-		}
-		
-		// get data not matching terms
-		var nonMatchingTerms = [];
-		for(j = 1; j < data[0].length; j++) {
+
+			// get terms matching data
 			var match = false;
-			for(i in terms)
+			for(j in terms)
 			{
-				if(terms[i] == data[0][j]) {
-					match == true;
-				}
-			}
-			if(match == false) {
-				nonMatchingTerms.push([data[0][j],termScores[j]]);
-			}
-		}
-		
-		// get terms matching data
-		var termCount = 0;
-		var matchingTerms = [];
-		for(i in terms) {
-			for(j = 1; j < data[0].length; j++)
-			{
-				if(terms[i] == data[0][j]) {
-					matchingTerms.push([terms[i],termScores[j],termCount]);
-					terms[i] = "<span style='background: " + fill(termCount) + "'>" + terms[i] + "</span>";
+				if(terms[j] == data[0][i]) {
+					match = true;
+					matchingTerms.push([terms[j],termScores[i],termCount]);
+					terms[j] = "<span style='background: " + fill(termCount) + "'>" + terms[j] + "</span>";
 					termCount++;
+					likes += termScores[i];
 				}
 			}
+			// get data non matching terms
+			if(match == false) {
+				nonMatchingTerms.push([data[0][i],termScores[i]]);
+			}
 		}
+
 
 		$('.highlighter').html(terms.join(" "));
 
 		// act if terms changed
 		if(matchingTerms.toString() != dataset.toString()) {
-			jQuery({animlikes: likes}).animate({animlikes: termCount * 11}, {
+			jQuery({animlikes: prevlikes}).animate({animlikes: likes}, {
 				duration: 1000,
 				easing:'swing', // can be anything
 				step: function() { // called on every step
@@ -73,7 +66,7 @@ $('#message').bind('input propertychange', function() {
 			});
 
 			dataset = matchingTerms.slice(0);
-			likes = termCount * 11;
+			prevlikes = likes;
 
 			// Update other graphs
 			updateBarchart(matchingTerms);
