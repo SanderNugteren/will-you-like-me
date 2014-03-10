@@ -2,32 +2,67 @@ var time = 0;
 var likes = 0;
 var dataset = [];
 
-var colors = ['#F99','#9F9','#99F','#FF9','#9FF','#F9F','#FCC','#CFC','#CCF'];
 var fill = d3.scale.category20();
+
+		// get prediction data
+		var data = testData();
+
+// act on input change
 $('#message').bind('input propertychange', function() {
 
-	// loop through message on change
-	var highlight = this.value.split(" ");
-	var termCount = 0;
-	var newData = [];
-	for(i = 0; i < highlight.length; i++) {
-		if(highlight[i].length > 4) {
-			newData.push([highlight[i],highlight[i].length, termCount]);
-			highlight[i] = "<span style='background: " + fill(termCount) + "'>" + highlight[i] + "</span>";
-			termCount++;
-		}
-	}
+	var message = this;
 	
-	$('.highlighter').html(highlight.join(" "));
-	
-		//newData.sort(function(a, b) { return (a[1] < b[1] ? 1 : (a[1] > b[1] ? -1 : 0)); });
-		
-
 	// force second timeout
 	clearTimeout(time);
 	time = setTimeout(function() {
+
+		// split message into terms
+		var terms = message.value.split(" ");
+		
+		// get sum of prediction data for each term
+		var termScores = [0];
+		for(i = 1; i < data[0].length; i++)
+		{
+			var score = 0;
+			for(j = 1; j < data.length; j++) {
+				score += data[j][i];
+			}
+			termScores.push(Math.round(score*100)/100);
+		}
+		
+		// get data not matching terms
+		var nonMatchingTerms = [];
+		for(j = 1; j < data[0].length; j++) {
+			var match = false;
+			for(i in terms)
+			{
+				if(terms[i] == data[0][j]) {
+					match == true;
+				}
+			}
+			if(match == false) {
+				nonMatchingTerms.push([data[0][j],termScores[j]]);
+			}
+		}
+		
+		// get terms matching data
+		var termCount = 0;
+		var matchingTerms = [];
+		for(i in terms) {
+			for(j = 1; j < data[0].length; j++)
+			{
+				if(terms[i] == data[0][j]) {
+					matchingTerms.push([terms[i],termScores[j],termCount]);
+					terms[i] = "<span style='background: " + fill(termCount) + "'>" + terms[i] + "</span>";
+					termCount++;
+				}
+			}
+		}
+
+		$('.highlighter').html(terms.join(" "));
+
 		// act if terms changed
-		if(newData.toString() != dataset.toString()) {
+		if(matchingTerms.toString() != dataset.toString()) {
 			jQuery({animlikes: likes}).animate({animlikes: termCount * 11}, {
 				duration: 1000,
 				easing:'swing', // can be anything
@@ -37,13 +72,13 @@ $('#message').bind('input propertychange', function() {
 				}
 			});
 
-			dataset = newData.slice(0);
+			dataset = matchingTerms.slice(0);
 			likes = termCount * 11;
 
 			// Update other graphs
-			updateBarchart(newData);
+			updateBarchart(matchingTerms);
 			//updateNetwork();
-			updateWordcloud();
+			updateWordcloud(nonMatchingTerms);
 		}
 	}, 200);
 });

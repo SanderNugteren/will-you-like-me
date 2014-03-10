@@ -27,7 +27,6 @@ for(var i in input){weightsArray[i]= input[i][1]};
 d3.layout.cloud().size([width, height])
 	.words(input.map(function(d,i) {
 		//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
-		console.log(d[0]);
 		return {text: d[0], size: d[1]*(100+(width+height)/input.length)};
 	}))
 	
@@ -61,8 +60,8 @@ d3.layout.cloud().size([width, height])
 	.start();
 
 
-function updateWordcloud() {
-	
+function updateWordcloud(test) {
+
 	var input = [["cat",0.9], ["dog",0.3], ["puppy",0.6], ["Rens",0.2], ["Arjen",0.2], ["Benjamin",0.2], ["Harriëtte",0.2],["Sander",0.2],
 	["Philip",0.2], ["javascript",0.1], ["word",0.1], ["cloud",0.7], ["awesome",0.8], ["will",0.3], ["you",0.2],["like",0.9],
 	["me",0.2], ["project",0.1], ["information",0.2], ["visualization",0.5], ["New Media",0.5], ["Human Centered Multimedia",0.1], 
@@ -71,12 +70,12 @@ function updateWordcloud() {
 	
 	
 	for(var i in input){wordsArray[i]= input[i][0]};
-	for(var i in input){weightsArray[i]= input[i][1]};
+	var maximum = d3.max(input, function(d) { return d[1]; });
+	for(var i in input){weightsArray[i]= Math.round(input[i][1] / maximum * 100)/100};
 
 	d3.layout.cloud().size([width, height])
 	.words(input.map(function(d,i) {
 		//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
-		console.log(d[0]);
 		return {text: d[0], size: d[1]*(100+(width+height)/input.length)};
 	}))
 		
