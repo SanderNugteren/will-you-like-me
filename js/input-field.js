@@ -19,7 +19,7 @@ $('#message').bind('input propertychange', function() {
 		// match message to data
 		dataset = match(message, data);
 
-		$('.highlighter').html(dataset.terms.join(" "));
+		$('.highlighter').html(dataset.terms.join(""));
 
 		// act if terms changed
 		if(dataset.matchingTerms.toString() != prevTerms.toString()) {

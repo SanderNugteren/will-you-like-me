@@ -1,6 +1,6 @@
 function match(message, data) {
 	// split message into terms
-	var terms = message.split(" ");
+	var terms = message.match(/\s|\.|,|\/|#|!|$|%|\^|&|\*|;|:|{|}|\=|\-|_|`|~|\(|\)|@|\+|\?|>|<|\[|\]|\+|[a-zA-Z0-9]+/g);
 
 	// set variables
 	var likes = 0;
