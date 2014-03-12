@@ -25,7 +25,7 @@ function match(message, data) {
 		{
 			if(terms[j].toLowerCase() == data[0][i].toLowerCase()) {
 				match = true;
-				matchingTerms.push([terms[j],termScores[i],j]);
+				matchingTerms.push([terms[j],termScores[i],parseInt(j)]);
 				termCount++;
 				likes += termScores[i];
 			}
@@ -41,7 +41,6 @@ function match(message, data) {
 		return a[2] > b[2];
 	})
 	for(i in matchingTerms) {
-		console.log(matchingTerms[i][2]);
 		terms[matchingTerms[i][2]] = "<span style='background: " + fill(j) + "'>" + matchingTerms[i][0] + "</span>";
 		matchingTerms[i][2] = j;
 		j++;
