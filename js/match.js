@@ -26,7 +26,6 @@ function match(message, data) {
 			if(terms[j].toLowerCase() == data[0][i].toLowerCase()) {
 				match = true;
 				matchingTerms.push([terms[j],termScores[i],j]);
-				terms[j] = "<span style='background: " + fill(j) + "'>" + terms[j] + "</span>";
 				termCount++;
 				likes += termScores[i];
 			}
@@ -35,6 +34,17 @@ function match(message, data) {
 		if(match == false) {
 			nonMatchingTerms.push([data[0][i],termScores[i]]);
 		}
+	}
+	
+	var j = 0;
+	matchingTerms.sort(function(a,b) {
+		return a[2] > b[2];
+	})
+	for(i in matchingTerms) {
+		console.log(matchingTerms[i][2]);
+		terms[matchingTerms[i][2]] = "<span style='background: " + fill(j) + "'>" + matchingTerms[i][0] + "</span>";
+		matchingTerms[i][2] = j;
+		j++;
 	}
 	
 	return {terms: terms, likes: likes, matchingTerms: matchingTerms, nonMatchingTerms: nonMatchingTerms, termScores: termScores}
