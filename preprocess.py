@@ -1,4 +1,3 @@
-import nltk
 import csv
 import string
 import re
@@ -15,13 +14,12 @@ def preprocess(csvFile):
         likes = []
         for row in csvReader:
             datarow = []
-            #we assume the likes are in the last column of the csv
             likes.append(row[3])
             post = row[0]
             post = re.sub('\s+', ' ', post).translate(None, string.punctuation)
             tokens = set()
             postDict = {}
-            for token in nltk.word_tokenize(post):
+            for token in post.split():
                 t = token.lower()
                 postDict[t] = 1
                 tokens.add(t)
@@ -33,12 +31,9 @@ def preprocess(csvFile):
         newHeader = allWords[:200]
         newHeader.append(header[3])
         csvWriter.writerow(newHeader)
-        #for w in allWords:
-        #    print w
-        #print len(allWords)
         for pD in xrange(len(postDicts)):
             row = []
-            for w in allWords[:200]:
+            for w in allWords[:20]:
                 row.append(1.0*(w in postDicts[pD]))
             row.append(likes[pD])
             csvWriter.writerow(row)
