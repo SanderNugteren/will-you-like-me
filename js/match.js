@@ -27,7 +27,6 @@ function match(message, data) {
 				match = true;
 				matchingTerms.push([terms[j],termScores[i],parseInt(j)]);
 				termCount++;
-				likes += termScores[i];
 			}
 		}
 		// get data non matching terms
@@ -36,15 +35,41 @@ function match(message, data) {
 		}
 	}
 	
-	var j = 0;
 	matchingTerms.sort(function(a,b) {
-		return a[2] > b[2];
+		return a[2] == b[2] ? 0 : (a[2] < b[2] ? -1 : 1)
 	})
+
+	// get unique terms
+	var j = 0;
+	var uniqueTerms = [];
 	for(i in matchingTerms) {
-		terms[matchingTerms[i][2]] = "<span style='background: " + fill(j) + "'>" + matchingTerms[i][0] + "</span>";
-		matchingTerms[i][2] = j;
+		if(!(matchingTerms[i][0] in uniqueTerms)) {
+			uniqueTerms[matchingTerms[i][0]] = j;
+			likes += matchingTerms[i][1];
+			j++;
+		}
+	}
+	
+	var matched = [];
+	var remove = [];
+	for(i in matchingTerms) {
+		// highlight same terms
+		if(matchingTerms[i][0] in matched) {
+			terms[matchingTerms[i][2]] = "<span style='background: " + fill(uniqueTerms[matchingTerms[i][0]]) + "'>" + matchingTerms[i][0] + "</span>";	
+			remove.push(i);
+		} else {
+			terms[matchingTerms[i][2]] = "<span style='background: " + fill(uniqueTerms[matchingTerms[i][0]]) + "'>" + matchingTerms[i][0] + "</span>";
+			matchingTerms[i][2] = uniqueTerms[matchingTerms[i][0]];
+			matched[matchingTerms[i][0]] = true;
+		}
+	}
+	
+	var j = 0;
+	for(i in remove) {
+		matchingTerms.splice(remove[i]-j, 1);
 		j++;
 	}
+
 	
 	return {terms: terms, likes: likes, matchingTerms: matchingTerms, nonMatchingTerms: nonMatchingTerms, termScores: termScores}
 }

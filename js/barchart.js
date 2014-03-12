@@ -6,7 +6,7 @@ var h = $('#barchart').height() - 84;
 	var leftpadding = 100;
 	
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	var barPadding = w / dataset.length / 12;
+	var barPadding = h / dataset.length / 12;
 	
 	var barchart = d3.select("#barchart")
 		.append("svg")
@@ -31,7 +31,7 @@ var h = $('#barchart').height() - 84;
 function updateBarchart(dataset) {
 			//var terms = ["time","person","year","way","day","thing","man","world","life","hand","part","child"]
 			
-			var barPadding = w / dataset.length / 12;
+			var barPadding = h / dataset.length / (3 + dataset.length);
 
 			xScale = d3.scale.linear()
 				.domain([0, d3.max(dataset, function(d) { return d[1]; })])
@@ -95,13 +95,13 @@ function updateBarchart(dataset) {
 				.transition()
 				.duration(1000)
 				.text(function(d) {
-					return d[1];
+					return Math.round(d[1]*10)/10;
 				})
 				.attr("x", function(d) {
-					return xScale(d[1]) - 20;
+					return xScale(d[1]) - 30;
 				})
 				.attr("y", function(d, i) { 
-					return yScale(i) + (h / dataset.length) / 2;
+					return yScale(i) + (h / dataset.length / 2) + 6;
 				});
 				
 			values.exit()
@@ -125,7 +125,7 @@ function updateBarchart(dataset) {
 				.transition()
 				.duration(1000)
 				.attr("y", function(d, i) { 
-					return yScale(i) + (h / dataset.length) / 2;
+					return yScale(i) + (h / dataset.length / 2) + 6;
 				})
 				.attr("x", function(d) {
 					return 0;
