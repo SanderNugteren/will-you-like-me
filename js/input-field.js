@@ -2,15 +2,12 @@ var time = 0;
 var prevTerms = [];
 var prevLikes = 0;
 
-// get prediction data
-var data = testData();
-dataset = match(" ", data);
 updateWordcloud(dataset.nonMatchingTerms);
 
-// act on input change
-$('#message').bind('input propertychange', function() {
+// update function
+function updateVisuals() {	
 
-	var message = this.value;
+	var message = $('#message').val();
 	
 	// force second timeout
 	clearTimeout(time);
@@ -41,4 +38,9 @@ $('#message').bind('input propertychange', function() {
 			updateWordcloud(dataset.nonMatchingTerms);
 		}
 	}, 200);
+}
+
+// act on input change
+$('#message').bind('input propertychange', function() {
+	updateVisuals();
 });
