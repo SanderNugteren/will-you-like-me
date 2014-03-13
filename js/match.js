@@ -13,6 +13,13 @@ function match(message, data) {
 	var nonMatchingTerms = [];
 	var termScores = [0];
 	
+	// push friend names into friendScores
+	var friendScores = [];
+	for(i = 1; i < data.length; i++)
+	{
+		friendScores[data[i][0]] = 0;
+	}
+	
 	// match terms to data
 	for(i = 1; i < data[0].length; i++)
 	{
@@ -31,11 +38,24 @@ function match(message, data) {
 				match = true;
 				matchingTerms.push([terms[j],termScores[i],parseInt(j)]);
 				termCount++;
+				
+				// sum score for friend
+				for(k = 1; k < data.length; k++) {
+					friendScores[data[k][0]] = friendScores[data[k][0]] + data[k][i];
+				}
 			}
 		}
+
 		// get data non matching terms
 		if(match == false) {
 			nonMatchingTerms.push([data[0][i],termScores[i]]);
+		}
+	}
+	
+	// normalize friend scores
+	if(termCount > 0) {
+		for(i in friendScores) {
+			friendScores[i] = Math.round(friendScores[i] / termCount * 100) / 100;
 		}
 	}
 	
@@ -54,10 +74,10 @@ function match(message, data) {
 		}
 	}
 	
+	// highlight same terms
 	var matched = [];
 	var remove = [];
 	for(i in matchingTerms) {
-		// highlight same terms
 		if(matchingTerms[i][0] in matched) {
 			terms[matchingTerms[i][2]] = "<span style='background: " + fill(uniqueTerms[matchingTerms[i][0]]) + "'>" + matchingTerms[i][0] + "</span>";	
 			remove.push(i);
@@ -68,6 +88,7 @@ function match(message, data) {
 		}
 	}
 	
+	// remove duplicate terms from barchart
 	var j = 0;
 	for(i in remove) {
 		matchingTerms.splice(remove[i]-j, 1);
@@ -75,5 +96,5 @@ function match(message, data) {
 	}
 
 	
-	return {terms: terms, likes: likes, matchingTerms: matchingTerms, nonMatchingTerms: nonMatchingTerms, termScores: termScores}
+	return {terms: terms, likes: likes, matchingTerms: matchingTerms, nonMatchingTerms: nonMatchingTerms, termScores: termScores, friendScores: friendScores}
 }

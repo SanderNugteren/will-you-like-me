@@ -3,6 +3,7 @@ var prevTerms = [];
 var prevLikes = 0;
 
 updateWordcloud(dataset.nonMatchingTerms);
+setNetwork();
 
 // update function
 function updateVisuals() {	
@@ -34,7 +35,7 @@ function updateVisuals() {
 
 			// Update other graphs
 			updateBarchart(dataset.matchingTerms);
-			//updateNetwork();
+			updateNetwork(dataset.friendScores);
 			updateWordcloud(dataset.nonMatchingTerms);
 		}
 	}, 200);
