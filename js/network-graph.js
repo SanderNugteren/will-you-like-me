@@ -5,6 +5,10 @@ var links = [
   {source: "Rens", sourcetype: "like", target: "Philip", targettype: "nolike"},
   {source: "Sander", sourcetype: "like", target: "Benjamin", targettype: "like"},
 ];
+
+var color = d3.scale.linear()
+    .domain([0, 0.5, 1])
+    .range(["red", "yellow", "green"]);
 		
 var nodes = {};
 
@@ -41,7 +45,7 @@ function setNetwork() {
 	var link = svg.selectAll(".link")
 		.data(force.links())
 		.enter().append("line")
-		.attr("class", function(d) { return d.type; } )
+		.attr("class", function(d) { return "foaf"; } )
 		.attr("id", function(d) { if(d.source.name == person) { return d.target.name; } });
 
 	var node = svg.selectAll(".node")
@@ -53,8 +57,7 @@ function setNetwork() {
 		.call(force.drag);
 
 	node.append("circle")
-		.attr("r", function(d) { 
-			if(d.type == "nolike") { return 10; } else { return 6; } })
+		.attr("r", 10)
 		.attr("class", function(d) { return d.type });
 
 	node.append("text")
@@ -117,8 +120,8 @@ function updateNetwork(friendScores) {
 	node.select("circle").transition()
 		.duration(1000)
 		.attr("r", function(d) { 
-			return friendScores[d.name] * 20 + 5; })
-		.attr("class", function(d) { return d.type });
+			return friendScores[d.name] * 10 + 5; })
+		.style("stroke", function(d, i) { return color(friendScores[d.name]); });
 
 	node.append("text")
 		.attr("x", 14)
