@@ -16,16 +16,19 @@ var nodes = {};
 var links = [];
 	
 function setNetwork() {
-	
 	// get all unique friend
 	for(i in friends) {
 		nodes[friends[i][0]] = {id: friends[i][0], name: friends[i][1], type: 'normal'};
 	}
 	
+	var processedFriends = [];
 	for(i in friends) {
 		// get all relations
 		for(j in friends[i][2]) {
-			links.push({source: nodes[friends[i][0]], target: nodes[friends[i][2][j]], type: 'like'});
+			if(!(friends[i][0]+""+friends[i][2][j] in processedFriends)) {
+				links.push({source: nodes[friends[i][0]], target: nodes[friends[i][2][j]], type: 'line'});
+			}
+			processedFriends[friends[i][2][j]+""+friends[i][0]] = true;
 		}
 	}
 	
@@ -33,15 +36,15 @@ function setNetwork() {
 		.nodes(d3.values(nodes))
 		.links(links)
 		.size([width, height])
-		.linkDistance( 20 )
-		.charge(-20)
+		.linkDistance( 50 )
+		.charge(-50)
 		.on("tick", tick)
 		.start();
 
 	var link = svg.selectAll(".link")
 		.data(force.links())
 		.enter().append("line")
-		.attr("class", function(d) { return "foaf"; } )
+		.attr("class", function(d) { return "line"; } )
 		.attr("id", function(d) { if(d.source.name == person) { return d.target.name; } });
 
 	var node = svg.selectAll(".node")
@@ -77,15 +80,15 @@ function setNetwork() {
 	}
 
 	function filter() {
-	  if(d3.select(this).select("circle").attr("class") == "ignored") {
-		d3.select(this).select("circle").transition()
-			.attr("class", "nolike")
-			.attr("r", 5);
-	  }
-	  else if (d3.select(this).select("circle").attr("class") == "nolike") {
+	  if(d3.select(this).select("circle").attr("class") == "normal") {
 		d3.select(this).select("circle").transition()
 			.attr("class", "ignored")
-			.attr("r", 6);
+			.attr("r", 4);
+	  }
+	  else if (d3.select(this).select("circle").attr("class") == "ignored") {
+		d3.select(this).select("circle").transition()
+			.attr("class", "normal")
+			.attr("r", 5);
 	  
 	  }
 	  
@@ -99,8 +102,8 @@ function updateNetwork(friendScores) {
 		.nodes(d3.values(nodes))
 		.links(links)
 		.size([width, height])
-		.linkDistance( 20 )
-		.charge(-20)
+		.linkDistance( 40 )
+		.charge(-50)
 		.on("tick", tick)
 		.start();
 
@@ -113,21 +116,29 @@ function updateNetwork(friendScores) {
 			return 5 - friendScores[d.id] * 5; })
 		.style("stroke", function(d, i) { return color(-friendScores[d.id]); });
 
+	var link = svg.selectAll(".link")
+		.data(force.links());
+
 	function tick() {
+	  link
+		  .attr("x1", function(d) { return d.source.x; })
+		  .attr("y1", function(d) { return d.source.y; })
+		  .attr("x2", function(d) { return d.target.x; })
+		  .attr("y2", function(d) { return d.target.y; })
 	  node
 		  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 	}
 	
 	function filter() {
-	  if(d3.select(this).select("circle").attr("class") == "ignored") {
-		d3.select(this).select("circle").transition()
-			.attr("class", "nolike")
-			.attr("r", 10);
-	  }
-	  else if (d3.select(this).select("circle").attr("class") == "nolike") {
+	  if(d3.select(this).select("circle").attr("class") == "normal") {
 		d3.select(this).select("circle").transition()
 			.attr("class", "ignored")
-			.attr("r", 6);
+			.attr("r", 4);
+	  }
+	  else if (d3.select(this).select("circle").attr("class") == "ignored") {
+		d3.select(this).select("circle").transition()
+			.attr("class", "normal")
+			.attr("r", 5);
 	  
 	  }
 	  

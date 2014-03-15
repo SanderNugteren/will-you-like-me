@@ -1,7 +1,6 @@
 var time = 0;
 var prevTerms = [];
 var prevLikes = 0;
-var friends = friends();
 
 updateWordcloud(dataset.nonMatchingTerms);
 setNetwork(friends);

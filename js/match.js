@@ -1,4 +1,5 @@
 // get prediction data
+var friends = friends();
 var data = testData();
 dataset = match(" ", data);
 
@@ -17,7 +18,7 @@ function match(message, data) {
 	var friendScores = [];
 	for(i = 1; i < data.length; i++)
 	{
-		friendScores[data[i][0]] = 0;
+		friendScores[data[i][0]] = [];
 	}
 	
 	// match terms to data
@@ -41,7 +42,7 @@ function match(message, data) {
 				
 				// sum score for friend
 				for(k = 1; k < data.length; k++) {
-					friendScores[data[k][0]] = friendScores[data[k][0]] + data[k][i];
+					friendScores[data[k][0]].push(data[k][i]);
 				}
 			}
 		}
@@ -52,10 +53,14 @@ function match(message, data) {
 		}
 	}
 	
-	// normalize friend scores
+	// calculate scores for friends and total likes
 	if(termCount > 0) {
 		for(i in friendScores) {
-			friendScores[i] = Math.round(friendScores[i] / termCount * 100) / 100 - 0.5;
+			var like = friendScores[i].reduce(function(previous,current){ 
+				return previous > current ? previous:current
+			});
+			likes += like;
+			friendScores[i] = like - 0.5;
 		}
 	}
 	
@@ -69,7 +74,6 @@ function match(message, data) {
 	for(i in matchingTerms) {
 		if(!(matchingTerms[i][0] in uniqueTerms)) {
 			uniqueTerms[matchingTerms[i][0]] = j;
-			likes += matchingTerms[i][1];
 			j++;
 		}
 	}

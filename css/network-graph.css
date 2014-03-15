@@ -14,10 +14,10 @@
   stroke-width: 4px;
 }
 
-#network .like {
-  fill: #999;
-  stroke: #9F0;
-  stroke-width: 4px;
+#network .line {
+  fill: #ffffbf;
+  stroke: #ffffbf;
+  stroke-width: 2px;
 }
 
 #network .normal{ 
@@ -26,13 +26,17 @@
   stroke-width: 2px;
 }
 
+#network .normal, #network .ignored:hover {
+    cursor: pointer;
+}
+
 #network .ignored { 
-  fill: #999;
+  fill: #BBB;
   stroke: #DDD;
-  stroke-width: 4px;
+  stroke-width: 2px;
 }
 
 #network text {
-  font: 9px sans-serif;
+  font: 10px sans-serif;
   pointer-events: none;
 }

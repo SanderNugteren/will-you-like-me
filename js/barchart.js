@@ -95,7 +95,7 @@ function updateBarchart(dataset) {
 				.transition()
 				.duration(1000)
 				.text(function(d) {
-					return Math.round(d[1]*10)/10;
+					return Math.round(d[1]);
 				})
 				.attr("x", function(d) {
 					return xScale(d[1]) - 30;
