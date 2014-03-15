@@ -55,7 +55,7 @@ function match(message, data) {
 	// normalize friend scores
 	if(termCount > 0) {
 		for(i in friendScores) {
-			friendScores[i] = Math.round(friendScores[i] / termCount * 100) / 100;
+			friendScores[i] = Math.round(friendScores[i] / termCount * 100) / 100 - 0.5;
 		}
 	}
 	
@@ -95,6 +95,5 @@ function match(message, data) {
 		j++;
 	}
 
-	
 	return {terms: terms, likes: likes, matchingTerms: matchingTerms, nonMatchingTerms: nonMatchingTerms, termScores: termScores, friendScores: friendScores}
 }

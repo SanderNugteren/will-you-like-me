@@ -1,28 +1,8 @@
 var person = "Benjamin Timmermans";
-var links = [
-  {source: "Benjamin", sourcetype: "like", target: "Rens", targettype: "like"},
-  {source: "Rens", sourcetype: "like", target: "Sander", targettype: "like"},
-  {source: "Rens", sourcetype: "like", target: "Philip", targettype: "nolike"},
-  {source: "Sander", sourcetype: "like", target: "Benjamin", targettype: "like"},
-];
 
 var color = d3.scale.linear()
-    .domain([0, 0.5, 1])
-    .range(["red", "yellow", "green"]);
-		
-var nodes = {};
-
-// Compute the distinct nodes from the links.
-links.forEach(function(link) {
-  link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, type: link.sourcetype});
-  link.target = nodes[link.target] || (nodes[link.target] = {name: link.target, type: link.targettype});
-  if(link.sourcetype == "like" && link.targettype == "like") {
-	link.type = "like";
-  } else {
-	link.type = "foaf";
-  }
-});
-
+    .domain([-0.5, 0, 0.5])
+    .range(["#fc8d59", "#ffffbf", "#91bfdb"]);
 
 var width = $('#network').width() - 20,
 	height = $('#network').height() - 74;
@@ -32,13 +12,29 @@ var svg = d3.select("#network")
 	.attr("width", width)
 	.attr("height", height);	
 
+var nodes = {};
+var links = [];
+	
 function setNetwork() {
+	
+	// get all unique friend
+	for(i in friends) {
+		nodes[friends[i][0]] = {id: friends[i][0], name: friends[i][1], type: 'normal'};
+	}
+	
+	for(i in friends) {
+		// get all relations
+		for(j in friends[i][2]) {
+			links.push({source: nodes[friends[i][0]], target: nodes[friends[i][2][j]], type: 'like'});
+		}
+	}
+	
 	var force = d3.layout.force()
 		.nodes(d3.values(nodes))
 		.links(links)
 		.size([width, height])
-		.linkDistance( 100 )
-		.charge(-150)
+		.linkDistance( 20 )
+		.charge(-20)
 		.on("tick", tick)
 		.start();
 
@@ -57,7 +53,9 @@ function setNetwork() {
 		.call(force.drag);
 
 	node.append("circle")
-		.attr("r", 10)
+		.attr("r", function(d) { 
+			return 5; })
+		.style("stroke", function(d, i) { return color(0); })
 		.attr("class", function(d) { return d.type });
 
 	node.append("text")
@@ -65,8 +63,7 @@ function setNetwork() {
 		.attr("dy", ".40em")
 		.text(function(d) { return d.name; });
 
-	
-	
+
 	function tick() {
 	  link
 		  .attr("x1", function(d) { return d.source.x; })
@@ -83,7 +80,7 @@ function setNetwork() {
 	  if(d3.select(this).select("circle").attr("class") == "ignored") {
 		d3.select(this).select("circle").transition()
 			.attr("class", "nolike")
-			.attr("r", 10);
+			.attr("r", 5);
 	  }
 	  else if (d3.select(this).select("circle").attr("class") == "nolike") {
 		d3.select(this).select("circle").transition()
@@ -102,34 +99,20 @@ function updateNetwork(friendScores) {
 		.nodes(d3.values(nodes))
 		.links(links)
 		.size([width, height])
-		.linkDistance( 100 )
-		.charge(-150)
+		.linkDistance( 20 )
+		.charge(-20)
 		.on("tick", tick)
 		.start();
 
 	var node = svg.selectAll(".node")
 		.data(force.nodes());
 	
-	node.enter()
-		.append("g")
-		.attr("class", "node")
-		.attr("id", function(d) { return d.name } )
-		.on("click", filter)
-		.call(force.drag);
-
 	node.select("circle").transition()
 		.duration(1000)
 		.attr("r", function(d) { 
-			return friendScores[d.name] * 10 + 5; })
-		.style("stroke", function(d, i) { return color(friendScores[d.name]); });
+			return 5 - friendScores[d.id] * 5; })
+		.style("stroke", function(d, i) { return color(-friendScores[d.id]); });
 
-	node.append("text")
-		.attr("x", 14)
-		.attr("dy", ".40em")
-		.text(function(d) { return d.name; });
-
-	
-	
 	function tick() {
 	  node
 		  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });

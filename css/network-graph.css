@@ -20,10 +20,10 @@
   stroke-width: 4px;
 }
 
-#network .nolike { 
+#network .normal{ 
   fill: #999;
   stroke: #7689B5;
-  stroke-width: 4px;
+  stroke-width: 2px;
 }
 
 #network .ignored { 
@@ -33,6 +33,6 @@
 }
 
 #network text {
-  font: 10px sans-serif;
+  font: 9px sans-serif;
   pointer-events: none;
 }
