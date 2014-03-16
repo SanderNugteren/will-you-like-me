@@ -2,7 +2,7 @@ var person = "Benjamin Timmermans";
 
 var color = d3.scale.linear()
     .domain([-0.5, 0, 0.5])
-    .range(["#fc8d59", "#ffffbf", "#91bfdb"]);
+    .range(["#ffeda0", "#feb24c", "#f03b20"]);
 
 var width = $('#network').width() - 20,
 	height = $('#network').height() - 74;
@@ -26,7 +26,7 @@ function setNetwork() {
 		// get all relations
 		for(j in friends[i][2]) {
 			if(!(friends[i][0]+""+friends[i][2][j] in processedFriends)) {
-				links.push({source: nodes[friends[i][0]], target: nodes[friends[i][2][j]], type: 'line'});
+				links.push({id: friends[i][0]+""+friends[i][2][j], source: nodes[friends[i][0]], target: nodes[friends[i][2][j]], type: 'line'});
 			}
 			processedFriends[friends[i][2][j]+""+friends[i][0]] = true;
 		}
@@ -34,18 +34,18 @@ function setNetwork() {
 	
 	var force = d3.layout.force()
 		.nodes(d3.values(nodes))
-		.links(links)
+		.links(d3.values(links))
 		.size([width, height])
 		.linkDistance( 50 )
 		.charge(-50)
 		.on("tick", tick)
 		.start();
 
-	var link = svg.selectAll(".link")
-		.data(force.links())
+	var link = svg.selectAll(".line")
+		.data(force.links(), function(d) { return d.id; })
 		.enter().append("line")
 		.attr("class", function(d) { return "line"; } )
-		.attr("id", function(d) { if(d.source.name == person) { return d.target.name; } });
+		.style("stroke", function(d, i) { return color(0); });
 
 	var node = svg.selectAll(".node")
 		.data(force.nodes())
@@ -58,8 +58,8 @@ function setNetwork() {
 	node.append("circle")
 		.attr("r", function(d) { 
 			return 5; })
-		.style("stroke", function(d, i) { return color(0); })
-		.attr("class", function(d) { return d.type });
+		.attr("class", function(d) { return d.type })
+		.style("stroke", function(d, i) { return color(0); });
 
 	node.append("text")
 		.attr("x", 14)
@@ -80,6 +80,7 @@ function setNetwork() {
 	}
 
 	function filter() {
+		updateWordcloud(dataset.nonMatchingTerms);
 	  if(d3.select(this).select("circle").attr("class") == "normal") {
 		d3.select(this).select("circle").transition()
 			.attr("class", "ignored")
@@ -98,11 +99,12 @@ function setNetwork() {
 }
 
 function updateNetwork(friendScores) {
+
 	var force = d3.layout.force()
 		.nodes(d3.values(nodes))
-		.links(links)
+		.links(d3.values(links))
 		.size([width, height])
-		.linkDistance( 40 )
+		.linkDistance( 50 )
 		.charge(-50)
 		.on("tick", tick)
 		.start();
@@ -116,19 +118,25 @@ function updateNetwork(friendScores) {
 			return 5 - friendScores[d.id] * 5; })
 		.style("stroke", function(d, i) { return color(-friendScores[d.id]); });
 
-	var link = svg.selectAll(".link")
-		.data(force.links());
+	var link = svg.selectAll(".line")
+		.data(force.links(), function(d) { return d.id; });
+	
+	link.transition()
+		.attr("class", function(d) { return "line"; } )
+		.style("stroke", function(d, i) { return color(-(friendScores[d.source.id]+friendScores[d.target.id])/2); });
 
-	function tick() {
+		function tick() {
 	  link
 		  .attr("x1", function(d) { return d.source.x; })
 		  .attr("y1", function(d) { return d.source.y; })
 		  .attr("x2", function(d) { return d.target.x; })
 		  .attr("y2", function(d) { return d.target.y; })
+
+
 	  node
 		  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 	}
-	
+		
 	function filter() {
 	  if(d3.select(this).select("circle").attr("class") == "normal") {
 		d3.select(this).select("circle").transition()
@@ -141,7 +149,6 @@ function updateNetwork(friendScores) {
 			.attr("r", 5);
 	  
 	  }
-	  
 	  //d3.select(".line").select(this.id).transition()
 		  //.attr("class", "ignored");
 	}
