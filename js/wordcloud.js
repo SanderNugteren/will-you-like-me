@@ -23,28 +23,27 @@ d3.layout.cloud().size([width, height])
 
 function updateWordcloud(input) {
 
-if(filteredFriends.length > 0) {
-	for(i = 0; i < filteredFriends.length; i++) {
-		for(j = 1; j < input.length; j++) {
-			if(filteredFriends[i] == input[j][0]) {
-				input.splice(j,1);
-			}
+filteredInput = input.slice();
+
+for(i = 0; i < filteredFriends.length; i++) {
+	for(j = 1; j < filteredInput.length; j++) {
+		if(filteredFriends[i] == filteredInput[j][0]) {
+			filteredInput.splice(j,1);
 		}
 	}
 }
-	
+
 // sum scores for each term
 var termScores = [];
-for(i = 1; i < input[0].length; i++)
+for(i = 1; i < filteredInput[0].length; i++)
 {
 	//get sum of prediction data for each term
 	var score = 0;
-	for(j = 1; j < input.length; j++) {
-		score += input[j][i];
+	for(j = 1; j < filteredInput.length; j++) {
+		score += filteredInput[j][i];
 	}
-	termScores.push([data[0][i],Math.round(score*100)/100]);
+	termScores.push([filteredInput[0][i],Math.round(score*100)/100]);
 }
-console.log(termScores);
 
 cloudScale = d3.scale.linear()
 	.domain([d3.min(termScores, function(d) { return d[1]; }), d3.max(termScores, function(d) { return d[1]; })])

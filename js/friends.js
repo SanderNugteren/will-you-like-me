@@ -6,7 +6,7 @@ function friends() {
 	})
 
 	// number of best friends	
-	mutual_friends = mutual_friends.slice(0,5);
+	mutual_friends = mutual_friends.slice(0,40);
 	var mutual_friends_list = [];
 	for(i in mutual_friends) {
 		mutual_friends_list[mutual_friends[i][0]] = true;
