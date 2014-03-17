@@ -1,4 +1,4 @@
-var person = "Benjamin Timmermans";
+var filteredFriends = [];
 
 var color = d3.scale.linear()
     .domain([-0.5, 0, 0.5])
@@ -52,7 +52,32 @@ function setNetwork() {
 		.enter().append("g")
 		.attr("class", "node")
 		.attr("id", function(d) { return d.name } )
-		.on("click", filter)
+		.on("click", function(d) {
+			d3.select(this).select("circle").transition()
+				.attr("class", 	function(d) {
+					if(d.type == "normal") {
+						return "ignored";
+					} else {
+						return "normal";
+					}
+				})
+				.attr("r", function(d) {
+					if(d.type == "normal") {
+						return 4;
+					} else {
+						return 5;
+					}
+				})
+				.style("stroke", function(d) {
+					if(d.type == "normal") {
+						d.type = "ignored";
+						return "#DDD";
+					} else {
+						d.type = "normal";
+						return color(0);
+					}
+				})
+		})
 		.call(force.drag);
 
 	node.append("circle")
@@ -78,24 +103,6 @@ function setNetwork() {
 	  node
 		  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 	}
-
-	function filter() {
-		updateWordcloud(dataset.nonMatchingTerms);
-	  if(d3.select(this).select("circle").attr("class") == "normal") {
-		d3.select(this).select("circle").transition()
-			.attr("class", "ignored")
-			.attr("r", 4);
-	  }
-	  else if (d3.select(this).select("circle").attr("class") == "ignored") {
-		d3.select(this).select("circle").transition()
-			.attr("class", "normal")
-			.attr("r", 5);
-	  
-	  }
-	  
-	  //d3.select(".line").select(this.id).transition()
-		  //.attr("class", "ignored");
-	}
 }
 
 function updateNetwork(friendScores) {
@@ -110,16 +117,42 @@ function updateNetwork(friendScores) {
 		.start();
 
 	var node = svg.selectAll(".node")
-		.data(force.nodes());
+		.data(force.nodes())
+		.on("click", function(d) {
+			// update wordcloud filter
+			updateWordcloud(dataset.nonMatchingTerms);
+			
+			if(d.type == "normal") {
+				filteredFriends[d.id] = true;	
+				d3.select(this).select("circle").transition()
+					.attr("class", 	function(d) { return "ignored"; })
+					.attr("r", function(d) { return 4; })
+					.style("stroke", function(d) { return color(-friendScores[d.id]); });
+				d.type = "ignored";	
+			} else {
+				d3.select(this).select("circle").transition()
+					.attr("class", 	function(d) { return "normal"; })
+					.attr("r", function(d) { return 5 - friendScores[d.id] * 5; })
+					.style("stroke", function(d) { return color(-friendScores[d.id]); });
+				d.type = "normal";	
+			}
+		});
 	
 	node.select("circle").transition()
 		.duration(1000)
 		.attr("r", function(d) { 
-			return 5 - friendScores[d.id] * 5; })
-		.style("stroke", function(d, i) { return color(-friendScores[d.id]); });
+			return 5 - friendScores[d.id] * 5; 
+		})
+		.style("stroke", function(d, i) { 
+			if(d.type == "normal") {
+				return color(-friendScores[d.id]);
+			}
+		});
 
 	var link = svg.selectAll(".line")
-		.data(force.links(), function(d) { return d.id; });
+		.data(force.links(), function(d) {
+			return d.id;
+		});
 	
 	link.transition()
 		.attr("class", function(d) { return "line"; } )
@@ -135,21 +168,5 @@ function updateNetwork(friendScores) {
 
 	  node
 		  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-	}
-		
-	function filter() {
-	  if(d3.select(this).select("circle").attr("class") == "normal") {
-		d3.select(this).select("circle").transition()
-			.attr("class", "ignored")
-			.attr("r", 4);
-	  }
-	  else if (d3.select(this).select("circle").attr("class") == "ignored") {
-		d3.select(this).select("circle").transition()
-			.attr("class", "normal")
-			.attr("r", 5);
-	  
-	  }
-	  //d3.select(".line").select(this.id).transition()
-		  //.attr("class", "ignored");
 	}
 }

@@ -37,8 +37,22 @@
 		<script type="text/javascript" src="js/testdata.js"></script>
 		<script type="text/javascript" src="js/match.js"></script>
 		<script type="text/javascript" src="js/wordcloud.js"></script>
-		<script type="text/javascript" src="js/network-graph.js"></script>
 		<script type="text/javascript" src="js/input-field.js"></script>
+		<script type="text/javascript" src="js/network-graph.js"></script>
+		<script type="text/javascript">
+			// get prediction data
+			
+			var friends = friends();
+			var data = testData();
+			var dataset = match(" ", data);
+			setNetwork();
+			updateWordcloud(dataset.nonMatchingTerms);
+			
+		</script>
+
 		<script type="text/javascript" src="js/barchart.js"></script>
+
+		<script type="text/javascript">
+		</script>
 	</body>
 </html>

@@ -22,7 +22,6 @@ d3.layout.cloud().size([width, height])
 
 
 function updateWordcloud(input) {
-
 cloudScale = d3.scale.linear()
 	.domain([d3.min(input, function(d) { return d[1]; }), d3.max(input, function(d) { return d[1]; })])
 	.range([0, 1]);

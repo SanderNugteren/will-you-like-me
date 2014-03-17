@@ -1,8 +1,3 @@
-// get prediction data
-var friends = friends();
-var data = testData();
-dataset = match(" ", data);
-
 function match(message, data) {
 	// split message into terms
 	var terms = message.match(/\s|\.|,|\/|#|!|$|%|\^|&|\*|;|:|{|}|\=|\-|_|`|~|\(|\)|@|\+|\?|>|<|\[|\]|\+|[a-zA-Z0-9]+/g);

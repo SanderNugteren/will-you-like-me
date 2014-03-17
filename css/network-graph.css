@@ -16,13 +16,11 @@
 
 #network .line {
   fill: #ffffbf;
-  stroke: #ffffbf;
   stroke-width: 4px;
 }
 
 #network .normal{ 
   fill: #999;
-  stroke: #7689B5;
   stroke-width: 2px;
 }
 
