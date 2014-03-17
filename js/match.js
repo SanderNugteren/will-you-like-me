@@ -1,3 +1,21 @@
+function deepCopy(obj) {
+    if (Object.prototype.toString.call(obj) === '[object Array]') {
+        var out = [], i = 0, len = obj.length;
+        for ( ; i < len; i++ ) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    if (typeof obj === 'object') {
+        var out = {}, i;
+        for ( i in obj ) {
+            out[i] = arguments.callee(obj[i]);
+        }
+        return out;
+    }
+    return obj;
+}
+
 function match(message, data) {
 	// split message into terms
 	var terms = message.match(/\s|\.|,|\/|#|!|$|%|\^|&|\*|;|:|{|}|\=|\-|_|`|~|\(|\)|@|\+|\?|>|<|\[|\]|\+|[a-zA-Z0-9]+/g);
@@ -6,7 +24,7 @@ function match(message, data) {
 	var likes = 0;
 	var termCount = 0;
 	var matchingTerms = [];
-	var nonMatchingTerms = data.slice();
+	var nonMatchingTerms = deepCopy(data);
 	var termScores = [0];
 	
 	// push friend names into friendScores
