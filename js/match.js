@@ -6,7 +6,7 @@ function match(message, data) {
 	var likes = 0;
 	var termCount = 0;
 	var matchingTerms = [];
-	var nonMatchingTerms = [];
+	var nonMatchingTerms = data.slice();
 	var termScores = [0];
 	
 	// push friend names into friendScores
@@ -15,7 +15,7 @@ function match(message, data) {
 	{
 		friendScores[data[i][0]] = [];
 	}
-	
+
 	// match terms to data
 	for(i = 1; i < data[0].length; i++)
 	{
@@ -34,17 +34,14 @@ function match(message, data) {
 				match = true;
 				matchingTerms.push([terms[j],termScores[i],parseInt(j)]);
 				termCount++;
-				
+		
 				// sum score for friend
+				nonMatchingTerms[0].splice(i,1);
 				for(k = 1; k < data.length; k++) {
 					friendScores[data[k][0]].push(data[k][i]);
+					nonMatchingTerms[k].splice(i,1);
 				}
 			}
-		}
-
-		// get data non matching terms
-		if(match == false) {
-			nonMatchingTerms.push([data[0][i],termScores[i]]);
 		}
 	}
 	

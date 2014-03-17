@@ -22,15 +22,39 @@ d3.layout.cloud().size([width, height])
 
 
 function updateWordcloud(input) {
+
+if(filteredFriends.length > 0) {
+	for(i = 0; i < filteredFriends.length; i++) {
+		for(j = 1; j < input.length; j++) {
+			if(filteredFriends[i] == input[j][0]) {
+				input.splice(j,1);
+			}
+		}
+	}
+}
+	
+// sum scores for each term
+var termScores = [];
+for(i = 1; i < input[0].length; i++)
+{
+	//get sum of prediction data for each term
+	var score = 0;
+	for(j = 1; j < input.length; j++) {
+		score += input[j][i];
+	}
+	termScores.push([data[0][i],Math.round(score*100)/100]);
+}
+console.log(termScores);
+
 cloudScale = d3.scale.linear()
-	.domain([d3.min(input, function(d) { return d[1]; }), d3.max(input, function(d) { return d[1]; })])
+	.domain([d3.min(termScores, function(d) { return d[1]; }), d3.max(termScores, function(d) { return d[1]; })])
 	.range([0, 1]);
 	
 	d3.layout.cloud()
 		.size([width, height])
-		.words(input.map(function(d,i) {
+		.words(termScores.map(function(d,i) {
 			//determine the size of a word here (I've created a formula that is based on the width height and array length. it seems to work for now)
-			return {text: d[0], size: cloudScale(d[1])*(50+(width+height)/input.length)}
+			return {text: d[0], size: cloudScale(d[1])*(50+(width+height)/termScores.length)}
 		}))
 		
 		//determine the angle of a word here (change 90 into 0 to not rotate any words)
