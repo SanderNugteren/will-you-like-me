@@ -23,7 +23,7 @@ d3.layout.cloud().size([width, height])
 
 function updateWordcloud(input) {
 
-filteredInput = input.slice();
+filteredInput = deepCopy(input);
 
 for(i = 0; i < filteredFriends.length; i++) {
 	for(j = 1; j < filteredInput.length; j++) {

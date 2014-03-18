@@ -38,3 +38,27 @@
   font: 10px sans-serif;
   pointer-events: none;
 }
+
+#network .scale {
+position:absolute;
+bottom: 20px;
+left: 20px;
+width: 110px;
+height: 10px;
+border: 1px solid #333;
+}
+#network .scale div {
+	float:left;
+	width: 10px;
+	height: 10px;
+}
+#network .low {
+	position:absolute;
+	bottom: 5px;
+	left: 10px;
+}
+#network .high {
+	position:absolute;
+	bottom: 5px;
+	left: 100px;
+}

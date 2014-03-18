@@ -5,7 +5,7 @@ var prevLikes = 0;
 // update function
 function updateVisuals() {	
 
-	var message = $('#message').val();
+	var message = $('#message').val().toLowerCase();
 	
 	// force second timeout
 	clearTimeout(time);
@@ -30,6 +30,10 @@ function updateVisuals() {
 			prevTerms = dataset.matchingTerms.slice(0);
 			prevLikes = dataset.likes;
 
+			// reset filtered friends if message is empty
+			if(message.length == 0) {
+				filteredFriends = [];
+			}
 			// Update other graphs
 			updateBarchart(dataset.matchingTerms);
 			updateNetwork(dataset.friendScores);

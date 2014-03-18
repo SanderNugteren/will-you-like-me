@@ -3,7 +3,7 @@ var filteredFriends = [];
 var color = d3.scale.linear()
     .domain([-0.5, 0, 0.5])
     .range(["#ffeda0", "#feb24c", "#f03b20"]);
-
+	
 var width = $('#network').width() - 20,
 	height = $('#network').height() - 74;
 
@@ -52,30 +52,7 @@ function setNetwork(nonMatchingTerms) {
 		.enter().append("g")
 		.attr("class", "node")
 		.attr("id", function(d) { return d.name } )
-		.on("click", function(d) {
-			if(d.type == "normal") {
-				filteredFriends.push(d.id);
-				d3.select(this).select("circle").transition()
-					.attr("class", 	function(d) { return "ignored"; })
-					.attr("r", function(d) { return 3; })
-					.style("stroke", function(d) { return "#ddd"; });
-				d.type = "ignored";	
-			} else {
-				// remove from filteredFriends
-				for(var i in filteredFriends){
-					if(filteredFriends[i] == d.id){
-						filteredFriends.splice(i,1);
-						break;
-					}
-				}
-				d3.select(this).select("circle").transition()
-					.attr("class", 	function(d) { return "normal"; })
-					.attr("r", function(d) { return 5; })
-					.style("stroke", function(d) { return color(0); });
-				d.type = "normal";	
-			}
-			updateWordcloud(nonMatchingTerms);
-		})
+		.on("click", filter)
 		.call(force.drag);
 
 	node.append("circle")
@@ -115,35 +92,14 @@ function updateNetwork(friendScores) {
 
 	var node = svg.selectAll(".node")
 		.data(force.nodes())
-		.on("click", function(d) {
-			// update wordcloud filter
-			if(d.type == "normal") {
-				filteredFriends.push(d.id);
-				d3.select(this).select("circle").transition()
-					.attr("class", 	function(d) { return "ignored"; })
-					.attr("r", function(d) { return 5; })
-					.style("stroke", function(d) { return "#ddd"; });
-				d.type = "ignored";	
-			} else {
-				// remove from filteredFriends
-				for(var i in filteredFriends){
-					if(filteredFriends[i] == d.id){
-						filteredFriends.splice(i,1);
-						break;
-					}
-				}
-				d3.select(this).select("circle").transition()
-					.attr("class", 	function(d) { return "normal"; })
-					.attr("r", function(d) { return 5 - friendScores[d.id] * 5; })
-					.style("stroke", function(d) { return color(-friendScores[d.id]); });
-				d.type = "normal";	
-			}
-			updateWordcloud(dataset.nonMatchingTerms);
-		});
+		.on("click", filter);
 	
 	node.select("circle").transition()
 		.duration(1000)
-		.attr("r", function(d) { 
+		.attr("r", function(d) {
+			if(filteredFriends.length == 0) {
+				d.type = "normal";		
+			}
 			return 5 - friendScores[d.id] * 5; 
 		})
 		.style("stroke", function(d, i) { 
@@ -172,4 +128,30 @@ function updateNetwork(friendScores) {
 	  node
 		  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 	}
+}
+
+function filter(d) {
+	// update wordcloud filter
+	if(d.type == "normal") {
+		filteredFriends.push(d.id);
+		d3.select(this).select("circle").transition()
+			.attr("class", 	function(d) { return "ignored"; })
+			.attr("r", function(d) { return 5; })
+			.style("stroke", function(d) { return "#ddd"; });
+		d.type = "ignored";	
+	} else {
+		// remove from filteredFriends
+		for(var i in filteredFriends){
+			if(filteredFriends[i] == d.id){
+				filteredFriends.splice(i,1);
+				break;
+			}
+		}
+		d3.select(this).select("circle").transition()
+			.attr("class", 	function(d) { return "normal"; })
+			.attr("r", function(d) { return 5 - dataset.friendScores[d.id] * 5; })
+			.style("stroke", function(d) { return color(-dataset.friendScores[d.id]); });
+		d.type = "normal";	
+	}
+	updateWordcloud(dataset.nonMatchingTerms);
 }
