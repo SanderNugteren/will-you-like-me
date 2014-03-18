@@ -1,4 +1,5 @@
 from sklearn import linear_model
+import numpy as np
 import math
 import csv
 import random
@@ -22,7 +23,7 @@ def build_model(csvFile):
             data.append(datarow)
             likes.append(float(row[-1]))
     #split data into a training and test set
-    testSize = int(math.ceil(len(data)*0.2)) #take 20 percent of the data
+    testSize = int(math.ceil(len(data)*0.1)) #take 20 percent of the data
     random.shuffle(data)
     trainData = data[:-testSize]
     testData = data[-testSize:]
@@ -35,6 +36,10 @@ def build_model(csvFile):
     #print the results
     print 'clf coef. learned: \n', clf.coef_
     print 'predictions: \n', clf.predict(testData)
+    print 'Residual sum of squares: %.5f' % \
+    np.mean((clf.predict(testData)-testLikes)**2)
+    print 'Residual sum of errors: %.5f' % \
+    np.mean((clf.predict(testData)-testLikes))
     print('Variance score: %.5f' % clf.score(testData, testLikes))
 
 if __name__ == '__main__':

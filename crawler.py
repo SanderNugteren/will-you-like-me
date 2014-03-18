@@ -1,4 +1,5 @@
-import urllib2
+#import urllib2
+import urllib.request
 import json
 import csv
 
@@ -19,8 +20,9 @@ def crawl( username, token, limit ):
     while( True ):
 
         print("Next page being processed.")
-        response = urllib2.urlopen(url)
-        content = response.read().decode('ISO-8859-1')#response.headers.get_content_charset())
+        response = urllib.request.urlopen(url)
+        #content = response.read().decode('ISO-8859-1')
+        content = response.read().decode(response.headers.get_content_charset())
         JSONdata = json.loads(content)
 
         # Open the data in this JSON file
@@ -111,15 +113,15 @@ def extractNumber(category, statusUpdate):
 
 def turnUsernameIntoId(username):
     url = "https://graph.facebook.com/"+username+"?fields=id"
-    response = urllib2.urlopen(url)
-    content = response.read().decode('ISO-8859-1')#response.headers.get_content_charset())
+    response = urllib.request.urlopen(url)
+    content = response.read().decode(response.headers.get_content_charset())
     JSONdata = json.loads(content)
     return JSONdata["id"]
 
 
 if __name__ == '__main__':
-    token = 'token goes here'
-    username = '203641139689699'
+    token = 'your_token'
+    username = 'username'
     limit = 1000
     crawl(username, token, limit)
 
