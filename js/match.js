@@ -66,10 +66,11 @@ function match(message, data) {
 	// calculate scores for friends and total likes
 	if(termCount > 0) {
 		for(i in friendScores) {
-			var like = friendScores[i].reduce(function(previous,current){ 
-				return previous > current ? previous:current
-			});
-			likes += like;
+			var like = 0;
+			for(j in friendScores[i]) {
+				like += friendScores[i][j];
+			}
+			likes += (like / friendScores[i].length);
 			friendScores[i] = like - 0.5;
 		}
 	}
