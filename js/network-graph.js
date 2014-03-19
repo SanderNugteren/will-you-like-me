@@ -1,8 +1,8 @@
 var filteredFriends = [];
 
 var color = d3.scale.linear()
-    .domain([-0.5, 0, 0.5])
-    .range(["#ffeda0", "#feb24c", "#f03b20"]);
+    .domain([0, 1])
+    .range(["#ffeda0", "#f03b20"]);
 	
 var width = $('#network').width() - 20,
 	height = $('#network').height() - 74;
@@ -14,6 +14,9 @@ var svg = d3.select("#network")
 
 var nodes = {};
 var links = [];
+
+var basesize = 3;
+var sizechange = 4;
 	
 function setNetwork(nonMatchingTerms) {
 	// get all unique friend
@@ -56,7 +59,7 @@ function setNetwork(nonMatchingTerms) {
 		.call(force.drag);
 
 	node.append("circle")
-		.attr("r", 5)
+		.attr("r", basesize)
 		.attr("class", function(d) { return d.type })
 		.style("stroke", function(d, i) { return color(0); });
 
@@ -100,11 +103,11 @@ function updateNetwork(friendScores) {
 			if(filteredFriends.length == 0) {
 				d.type = "normal";		
 			}
-			return 5 - friendScores[d.id] * 5; 
+			return basesize + friendScores[d.id] * sizechange; 
 		})
 		.style("stroke", function(d, i) { 
 			if(d.type == "normal") {
-				return color(-friendScores[d.id]);
+				return color(friendScores[d.id]);
 			}
 		});
 
@@ -115,7 +118,7 @@ function updateNetwork(friendScores) {
 	
 	link.transition()
 		.attr("class", function(d) { return "line"; } )
-		.style("stroke", function(d, i) { return color(-(friendScores[d.source.id]+friendScores[d.target.id])/2); });
+		.style("stroke", function(d, i) { return color((friendScores[d.source.id]+friendScores[d.target.id])/2); });
 
 		function tick() {
 	  link
@@ -136,7 +139,7 @@ function filter(d) {
 		filteredFriends.push(d.id);
 		d3.select(this).select("circle").transition()
 			.attr("class", 	function(d) { return "ignored"; })
-			.attr("r", function(d) { return 5; })
+			.attr("r", function(d) { return basesize; })
 			.style("stroke", function(d) { return "#ddd"; });
 		d.type = "ignored";	
 	} else {
@@ -149,8 +152,8 @@ function filter(d) {
 		}
 		d3.select(this).select("circle").transition()
 			.attr("class", 	function(d) { return "normal"; })
-			.attr("r", function(d) { return 5 - dataset.friendScores[d.id] * 5; })
-			.style("stroke", function(d) { return color(-dataset.friendScores[d.id]); });
+			.attr("r", function(d) { return basesize + dataset.friendScores[d.id] * sizechange; })
+			.style("stroke", function(d) { return color(dataset.friendScores[d.id]); });
 		d.type = "normal";	
 	}
 	updateWordcloud(dataset.nonMatchingTerms);

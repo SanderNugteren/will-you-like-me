@@ -71,7 +71,7 @@ function match(message, data) {
 				like += friendScores[i][j];
 			}
 			likes += (like / friendScores[i].length);
-			friendScores[i] = like - 0.5;
+			friendScores[i] = 1 - (like / friendScores[i].length);
 		}
 	}
 	
