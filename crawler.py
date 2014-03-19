@@ -131,4 +131,6 @@ if __name__ == '__main__':
     username = 'username'
     limit = 1000
     crawl(username, token, limit)
+    #crawlFriends( username, token )
+    
 

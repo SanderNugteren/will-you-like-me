@@ -52,10 +52,10 @@ def build_model(csvFile):
     clfOutput.fit(data, likes)
     #print the results
     #print 'clf coef. learned: \n', clf.coef_
-    print 'predictions: \n', clf.predict(testData)
-    print 'actual data: \n', testLikes
-    print 'Residual sum of squares: %.5f' % \
-    np.median((clf.predict(testData)-testLikes)**2)
+    print('predictions: \n', clf.predict(testData))
+    print('actual data: \n', testLikes)
+    print('Residual sum of squares: %.5f' % \
+        np.median((clf.predict(testData)-testLikes)**2))
     print('Variance score: %.5f' % clf.score(testData, testLikes))
     return header, clfOutput
 

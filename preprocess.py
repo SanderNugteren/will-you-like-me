@@ -6,11 +6,12 @@ import datetime
 
 def preprocess(csvFile):
     # read csv
-    with open(csvFile, 'rb') as csvfile:
+    with open(csvFile, 'r') as csvfile:
         csvReader = csv.reader(csvfile, delimiter=',', quotechar='|')
         procCsv = open('processed-data.csv', 'w')
         csvWriter = csv.writer(procCsv)
-        header = csvReader.next()
+        try: header = csvReader.next()
+        except AttributeError: header = next(csvReader)
         allWordsCounting = collections.Counter()
         postDicts = []
         postLengths = []
@@ -22,10 +23,11 @@ def preprocess(csvFile):
         postedInNight = []
         likes = []
         for row in csvReader:
-            datarow = []
+            if row == []: continue
             likes.append(row[3])
             post = row[0]
-            post = re.sub('\s+', ' ', post).translate(None, string.punctuation)
+            post = re.sub('\s+', ' ', post)
+            post = ''.join(ch for ch in post if ch not in set(string.punctuation))
             tokens = set()
             postDict = {}
             tokenList = post.split()
@@ -37,7 +39,8 @@ def preprocess(csvFile):
             postDicts.append(postDict)
             postLengths.append(row[1])
             date = datetime.datetime.strptime(row[2][11:19], "%H:%M:%S")
-            secs_since_midnight = (date - date.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
+            try: secs_since_midnight = (date - date.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds()
+            except AttributeError: secs_since_midnight = (date - date.replace(hour=0, minute=0, second=0, microsecond=0)).seconds
             postedInNight.append((secs_since_midnight >= 0 and\
                     secs_since_midnight < 3600*6)*1.0)
             postedInMorning.append((secs_since_midnight >= 3600*6 and\
@@ -50,8 +53,6 @@ def preprocess(csvFile):
             postHasPhoto.append((row[6] == 'photo')*1.0)
         allWords = [i for i, v in allWordsCounting.most_common(40)]
         allWords = allWords[10:]
-        #make a new header with allWords and features from header
-        #TODO add other features besides just the words
         newHeader = allWords[:]
         # Can't forget about [:]! Otherwise the header is a pointer to allwords!
         newHeader.append("post length")
@@ -63,7 +64,7 @@ def preprocess(csvFile):
         newHeader.append("post has_photo")
         newHeader.append(header[3]) #number of likes
         csvWriter.writerow(newHeader)
-        for pD in xrange(len(postDicts)):
+        for pD in range(len(postDicts)):
             row = []
             for w in allWords:
                 row.append(1.0*(w in postDicts[pD]))
