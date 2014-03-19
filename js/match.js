@@ -40,7 +40,7 @@ function match(message, data) {
 		//get sum of prediction data for each term
 		var score = 0;
 		for(j = 1; j < data.length; j++) {
-			score += data[j][i];
+			score += data[j][data[0].length - i];
 		}
 		termScores.push(Math.round(score*100)/100);
 
@@ -48,16 +48,16 @@ function match(message, data) {
 		var match = false;
 		for(j in terms)
 		{
-			if(terms[j].toLowerCase() == data[0][i].toLowerCase()) {
+			if(terms[j].toLowerCase() == data[0][data[0].length - i].toLowerCase()) {
 				match = true;
 				matchingTerms.push([terms[j],termScores[i],parseInt(j)]);
 				termCount++;
 		
 				// sum score for friend
-				nonMatchingTerms[0].splice(i,1);
+				nonMatchingTerms[0].splice(data[0].length - i,1);
 				for(k = 1; k < data.length; k++) {
-					friendScores[data[k][0]].push(data[k][i]);
-					nonMatchingTerms[k].splice(i,1);
+					friendScores[data[k][0]].push(data[k][data[0].length - i]);
+					nonMatchingTerms[k].splice(data[0].length - i,1);
 				}
 			}
 		}

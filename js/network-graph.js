@@ -48,7 +48,6 @@ function setNetwork(nonMatchingTerms) {
 		.data(force.links(), function(d) { return d.id; })
 		.enter().append("line")
 		.attr("class", function(d) { return "line"; } )
-		.style("stroke", function(d, i) { return color(0); });
 
 	var node = svg.selectAll(".node")
 		.data(force.nodes())
@@ -116,11 +115,7 @@ function updateNetwork(friendScores) {
 			return d.id;
 		});
 	
-	link.transition()
-		.attr("class", function(d) { return "line"; } )
-		.style("stroke", function(d, i) { return color((friendScores[d.source.id]+friendScores[d.target.id])/2); });
-
-		function tick() {
+	function tick() {
 	  link
 		  .attr("x1", function(d) { return d.source.x; })
 		  .attr("y1", function(d) { return d.source.y; })

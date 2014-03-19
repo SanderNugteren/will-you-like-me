@@ -15,8 +15,9 @@
 }
 
 #network .line {
-  fill: #ffffbf;
-  stroke-width: 4px;
+  fill: #CCC;
+  stroke: #CCC;
+  stroke-width: 2px;
 }
 
 #network .normal{ 
