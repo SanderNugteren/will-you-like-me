@@ -1,8 +1,12 @@
 from sklearn import linear_model
+from sklearn import svm
+from sklearn.linear_model import SGDClassifier
+
 import numpy as np
 import math
 import csv
 import random
+import copy
 
 def build_model(csvFile):
     """
@@ -11,6 +15,7 @@ def build_model(csvFile):
     """
     data = []
     likes = []
+    header = []
     #read in data and likes
     with open(csvFile, 'rb') as csvfile:
         csvReader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -24,23 +29,37 @@ def build_model(csvFile):
             likes.append(float(row[-1]))
     #split data into a training and test set
     testSize = int(math.ceil(len(data)*0.1)) #take 20 percent of the data
-    random.shuffle(data)
+
+    combined = zip(data, likes)
+    random.shuffle(combined)
+    data[:], likes[:] = zip(*combined)
+    
     trainData = data[:-testSize]
     testData = data[-testSize:]
     #do the same for the likes
     trainLikes = likes[:-testSize]
     testLikes = likes[-testSize:]
+
     #fit a model to the training data
     clf = linear_model.LinearRegression()
+    #clf = linear_model.Perceptron()
+    #clf = svm.SVR()
+    #clf = linear_model.LogisticRegression()
+    #clf = SGDClassifier()
+
+    clfOutput = copy.deepcopy(clf)
     clf.fit(trainData, trainLikes)
+    clfOutput.fit(data, likes)
     #print the results
-    print 'clf coef. learned: \n', clf.coef_
+    #print 'clf coef. learned: \n', clf.coef_
     print 'predictions: \n', clf.predict(testData)
+    print 'actual data: \n', testLikes
     print 'Residual sum of squares: %.5f' % \
-    np.mean((clf.predict(testData)-testLikes)**2)
-    print 'Residual sum of errors: %.5f' % \
-    np.mean((clf.predict(testData)-testLikes))
+    np.median((clf.predict(testData)-testLikes)**2)
     print('Variance score: %.5f' % clf.score(testData, testLikes))
+    return header, clfOutput
 
 if __name__ == '__main__':
-    build_model('processed-data.csv')
+    (header, clf) = build_model('processed-data.csv')
+    #print [i for i in header[:-1]]
+    #print [i for i in clf.coef_]
