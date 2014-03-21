@@ -103,7 +103,7 @@ body{
 }
 	
 #input, #wordcloud, #barchart, #network {
-	width: 49.5%;
+	width: 49%;
 	position: relative;
 	padding:0px;
 	margin: 0px;
@@ -115,7 +115,7 @@ body{
 
 /* Input */
 #input {
-	display:inline-flex;
+	display:inline;
 	float: left;
 	border-right: 1px dashed #59729d;
 	border-bottom: 1px dashed #59729d;
@@ -278,27 +278,20 @@ position: relative;
 	height: 300px;
 }
 .aboutus, .aboutusright, .aboutus2 {
-width: 99%;
 text-align: left;
 font-size: 12px;
 margin-top: -5px;
 letter-spacing: 1px;
 }
-.bold a:link, .bold a:hover, .bold a:visited{
-	text-decoration: none;
-	color: #000;
-}
 .aboutus2{
 text-align: left;
 font-size: 11px;
 margin-top: -12px;
-float: left;
 letter-spacing: 1px;
 }
 .aboutusright, .aboutusright2{
 margin-top: 2px;
 margin-left: 20px;
-float: left;
 letter-spacing: 1px;
 }
 .aboutusright2{
@@ -306,9 +299,12 @@ text-align: left;
 font-size: 11px;
 margin-top: -12px;
 margin-left: 20px;
-float: left;
 letter-spacing: 1px;
 }
 .bold {
 	font-weight: bold;
+}
+.bold a:link, .bold a:hover, .bold a:visited{
+	text-decoration: none;
+	color: #000;
 }
