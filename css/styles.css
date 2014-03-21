@@ -12,7 +12,7 @@ body{
 
 #logohead {
 	position:absolute;
-	width: 100%;
+	width: 90%;
 	height: 140px;
 	margin: -110px 0 0 0;
 	padding-left: 5px;
@@ -24,9 +24,9 @@ body{
 	}
 
 #paper {
-	margin:120px 0 0 20px;
+	margin:80px 0 0 20px;
 	text-align: center;
-	width: 100%;
+	width: 99.5%;
 	zoom: 1;
 	}
 	#paper:before, #paper:after {
@@ -36,22 +36,26 @@ body{
 	#paper:after {
 	 	clear: both
 	}
-	#paper .item {
+	#paper .item, #paper .item2 {
 		font-size: 13px;   
 		background: #fff;      
 		border: 1px solid #ddd;
 		color: #333;
 		padding: 20px;
 		width: 90%;
-		height: 800px;
 		_display: inline; /* IE6 double margin fix */
 		position: relative;
-		margin: -0px 0px;
 		-moz-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
 		-webkit-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
 		box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);	
 	}
-	#paper .item:after {
+	#paper .item {
+		height: 519px;
+	}
+	#paper .item2 {
+		height: 800px;
+	}
+	#paper .item:after, #paper .item2:after {
 	 	z-index: -1; 
 	 	position: absolute; 
 	 	content: "";
@@ -102,19 +106,29 @@ body{
 	margin: 2% 8% 0 0;
 }
 	
-#input, #wordcloud, #barchart, #network {
-	width: 49%;
+#input, #wordcloud, #barchart, #network, #abouttext, #aboutwylm, #reports, #contactus {
+	width: 49.4%;
 	position: relative;
-	padding:0px;
-	margin: 0px;
+}
+#input, #wordcloud {
+	height: 225px;
+	margin-top: -15px;
+}
+#barchart, #network {
+	height: 322px;
+}
+#aboutwylm, #abouttext {
+	margin-top: -10px;
+}
+#abouttext, #aboutwylm, #reports, #contactus {
 	height: 400px;
 }
-#input img, #wordcloud img, #barchart img, #network img {
-	padding-top: 20px;
+#input img, #wordcloud img, #barchart img, #network img, #abouttext img, #aboutwylm img, #reports img, #contactus img {
+	padding: 20px 0 0 10px;
 }
 
 /* Input */
-#input {
+#input, #aboutwylm {
 	display:inline;
 	float: left;
 	border-right: 1px dashed #59729d;
@@ -123,7 +137,9 @@ body{
 	letter-spacing: 1px;
 }
 #input .highlighter, textarea {
-	width: 406px;
+	min-width: 406px;
+	max-width: 550px;
+	max-height: 80px;
 	font-size: 10pt;
 }
 #input .highlighter {
@@ -153,19 +169,18 @@ body{
 	font-weight: bold;
 	color: #59729d;
 }
-
 #prediction {
 position: relative;
 	background: transparent;
 	text-align: center;
-	padding: 40px 0 0 0;
+	padding: 0 0 0 0;
 }
 .likespic {
 position: relative;	
 }
 
 /* Wordcloud */
-#wordcloud {
+#wordcloud, #abouttext {
 	float: right;
 	border-bottom: 1px dashed #59729d;
 	margin-right: 1%;
@@ -175,7 +190,7 @@ position: relative;
 }
 
 /* Barchart */
-#barchart {
+#barchart, #reports {
 	border-right: 1px dashed #59729d;
 	float: left;
 }
@@ -202,7 +217,7 @@ position: relative;
 }
 
 /* Network graph */
-#network {
+#network, #contactus {
 	margin-right: 1%;
 	float: right;
 }
@@ -268,10 +283,13 @@ position: relative;
 .menuabout {
 	padding-left: 20px;
 }
-.copyrightmenu {
+.copyrightmenu, .copyrightmenu-about {
 	float: right;
-	margin: 2% 8% 0 0;
-	padding-bottom: 10px;
+	margin: 1% 8% 0 0;
+	padding-bottom: 0px;
+}
+.copyrightmenu-about{
+	padding-bottom: 5px;
 }
 .poster {
 position: relative;
