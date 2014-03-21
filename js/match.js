@@ -34,15 +34,17 @@ function match(message, data) {
 		friendScores[data[i][0]] = [];
 	}
 
+	var moreData = likePrediction();
+	
 	// match terms to data
-	for(i = 1; i < data[0].length; i++)
+	for(i = 1; i < moreData[0].length; i++)
 	{
 		//get sum of prediction data for each term
 		var score = 0;
-		for(j = 1; j < data.length; j++) {
-			score += data[j][data[0].length - i];
+		for(j = 1; j < moreData.length; j++) {
+			score += moreData[j][moreData[0].length - i];
 		}
-		termScores.push(Math.round(score*100)/100);
+		termScores.push(score);
 
 		// get terms matching data
 		var match = false;
@@ -64,15 +66,24 @@ function match(message, data) {
 	}
 	
 	// calculate scores for friends and total likes
+			// Not completely sure what this does:
+			// friendScores[i] = 1 - (like / friendScores[i].length);
 	if(termCount > 0) {
-		for(i in friendScores) {
-			var like = 0;
-			for(j in friendScores[i]) {
-				like += friendScores[i][j];
+		var like = 0;
+		for(j in moreData[1]) {
+			if (j > moreData[1].length-8) break;
+			if ( isIn(moreData[0][j], matchingTerms)) {
+				like += moreData[1][j];
 			}
-			likes += (like / friendScores[i].length);
-			friendScores[i] = 1 - (like / friendScores[i].length);
 		}
+		like += moreData[1][moreData[1].length-7] * 10.0; // length
+		like += moreData[1][moreData[1].length-6] * 1.0; // night
+		like += moreData[1][moreData[1].length-5] * 0.0; // morning
+		like += moreData[1][moreData[1].length-4] * 0.0; // afternoon
+		like += moreData[1][moreData[1].length-3] * 0.0; // evening
+		like += moreData[1][moreData[1].length-2] * 0.0; // Has link
+		like += moreData[1][moreData[1].length-1] * 1.0; // Has photo
+		likes = like;
 	}
 	
 	matchingTerms.sort(function(a,b) {
@@ -111,4 +122,11 @@ function match(message, data) {
 	}
 
 	return {terms: terms, likes: likes, matchingTerms: matchingTerms, nonMatchingTerms: nonMatchingTerms, termScores: termScores, friendScores: friendScores}
+}
+
+function isIn(word, list) {
+	for (part in list) {
+		if (list[part][0] == word) return true;
+	}
+	return false;
 }
