@@ -1,18 +1,21 @@
-<html>
-<head>
-<title>Will You Like Me?</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
-    <script type="text/javascript" src="lib/d3.v3.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Will You Like It?</title>
+		<script type="text/javascript" src="lib/d3.v3.js"></script>
 		<script type="text/javascript" src="lib/d3.layout.cloud.js"></script>
 		<script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
-</head>
-<body>
-<div id="header">
-<img src="images/willyoulikeme2.png" class="banner">
-<div id="menu"><a href="about.html">about us</a><a href="contact.html">contact us</a></div>
-</div>
-<div id='input'>
+		<link rel="stylesheet" type="text/css" href="css/body.css">
+		<link rel="stylesheet" type="text/css" href="css/barchart.css">
+		<link rel="stylesheet" type="text/css" href="css/input-field.css">
+		<link rel="stylesheet" type="text/css" href="css/network-graph.css">
+		<link rel="stylesheet" type="text/css" href="css/wordcloud.css">
+	</head>
+	<body>
+		<div id='input'>
 			<div class='container'>
+				<img src='images/logo-horizontal.png' id='logo' border='0' />
 				<div class="highlighter"></div><textarea id="message" rows="4" cols="20"></textarea>
 				<div id='prediction'><img src='images/like.png' border='0' height='12' /> <span id='likes'>0 friends</span> will like this</div>
 			</div>
@@ -31,9 +34,8 @@
 			<div class='scale'><div style='background: #ffeda0;'></div><div style='background: #ffe18f;'></div><div style='background: #ffd57e;'></div><div style='background: #feca6e;'></div><div style='background: #febe5d;'></div><div style='background: #feb24c;'></div><div style='background: #fb9a43;'></div><div style='background: #f8823a;'></div><div style='background: #f66b32;'></div><div style='background: #f35329;'></div><div style='background: #f03b20;'></div></div>
 			<div class='low'>Liked</div><div class='high'>Not liked</div>
 		</div>
-
-
-<script type="text/javascript" src="js/friends.js"></script>
+		
+		<script type="text/javascript" src="js/friends.js"></script>
 		<script type="text/javascript" src="js/testdata.js"></script>
 		<script type="text/javascript" src="js/match.js"></script>
 		<script type="text/javascript" src="js/input-field.js"></script>
@@ -50,6 +52,7 @@
 			
 		</script>
 		<script type="text/javascript" src="js/barchart.js"></script>
-
-</body>
+		<script type="text/javascript">
+		</script>
+	</body>
 </html>
