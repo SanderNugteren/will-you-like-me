@@ -76,7 +76,9 @@ function match(message, data) {
 				like += moreData[1][j];
 			}
 		}
-		like += moreData[1][moreData[1].length-7] * 10.0; // length
+		var postLength = dataset.terms.length;
+		console.log(postLength);
+		like += moreData[1][moreData[1].length-7] * postLength; // length
 		like += moreData[1][moreData[1].length-6] * 1.0; // night
 		like += moreData[1][moreData[1].length-5] * 0.0; // morning
 		like += moreData[1][moreData[1].length-4] * 0.0; // afternoon
