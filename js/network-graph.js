@@ -15,10 +15,10 @@ var svg = d3.select("#network")
 var nodes = {};
 var links = [];
 
-var basesize = 3;
+var basesize = 4;
 var sizechange = 4;
 	
-function setNetwork(nonMatchingTerms) {
+function setNetwork() {
 	// get all unique friend
 	for(i in friends) {
 		nodes[friends[i][0]] = {id: friends[i][0], name: friends[i][1], type: 'normal'};
@@ -60,7 +60,7 @@ function setNetwork(nonMatchingTerms) {
 	node.append("circle")
 		.attr("r", basesize)
 		.attr("class", function(d) { return d.type })
-		.style("stroke", function(d, i) { return color(0); });
+		.style("fill", function(d, i) { return color(0); });
 
 	node.append("text")
 		.attr("x", 14)
@@ -104,7 +104,7 @@ function updateNetwork(friendScores) {
 			}
 			return basesize + friendScores[d.id] * sizechange; 
 		})
-		.style("stroke", function(d, i) { 
+		.style("fill", function(d, i) { 
 			if(d.type == "normal") {
 				return color(friendScores[d.id]);
 			}
@@ -135,7 +135,7 @@ function filter(d) {
 		d3.select(this).select("circle").transition()
 			.attr("class", 	function(d) { return "ignored"; })
 			.attr("r", function(d) { return basesize; })
-			.style("stroke", function(d) { return "#ddd"; });
+			.style("fill", function(d) { return "#999"; });
 		d.type = "ignored";	
 	} else {
 		// remove from filteredFriends
@@ -148,7 +148,7 @@ function filter(d) {
 		d3.select(this).select("circle").transition()
 			.attr("class", 	function(d) { return "normal"; })
 			.attr("r", function(d) { return basesize + dataset.friendScores[d.id] * sizechange; })
-			.style("stroke", function(d) { return color(dataset.friendScores[d.id]); });
+			.style("fill", function(d) { return color(dataset.friendScores[d.id]); });
 		d.type = "normal";	
 	}
 	updateWordcloud(dataset.nonMatchingTerms);

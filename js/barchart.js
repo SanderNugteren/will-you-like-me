@@ -34,7 +34,7 @@ function updateBarchart(dataset) {
 			var barPadding = h / dataset.length / (3 + dataset.length);
 
 			xScale = d3.scale.linear()
-				.domain([0, d3.max(dataset, function(d) { return d[1]; })])
+				.domain([d3.min(dataset, function(d) { return d[1]; }), d3.max(dataset, function(d) { return d[1]; })])
 				.range([leftpadding, w - padding]);
 
 			yScale = d3.scale.linear()

@@ -136,11 +136,18 @@ body{
 	font-size: 25px; 
 	letter-spacing: 1px;
 }
+.inputcontainer {
+	width: 410px;
+	margin: auto;
+}
 #input .highlighter, textarea {
-	min-width: 406px;
-	max-width: 550px;
+	font-family: monospace;
+	width: 406px;
+	text-align: left;
 	max-height: 80px;
 	font-size: 10pt;
+	font-weight: 400;
+	letter-spacing: 0px;
 }
 #input .highlighter {
 	position: absolute;
@@ -221,21 +228,16 @@ position: relative;
 	margin-right: 1%;
 	float: right;
 }
-#network .foaf { 
-  fill: #999;
-  stroke: #7689B5;
-  stroke-width: 4px;
-}
 
 #network .line {
-  fill: #CCC;
-  stroke: #CCC;
+  fill: #666;
+  stroke: #666;
   stroke-width: 2px;
 }
 
-#network .normal{ 
-  fill: #999;
-  stroke-width: 2px;
+#network .normal{
+  stroke: #666;
+  stroke-width: 1px;
 }
 
 #network .normal, #network .ignored:hover {
@@ -243,9 +245,9 @@ position: relative;
 }
 
 #network .ignored { 
-  fill: #BBB;
-  stroke: #DDD;
-  stroke-width: 2px;
+  fill: #999;
+  stroke: #666;
+  stroke-width: 1px;
 }
 
 #network text {

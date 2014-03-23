@@ -16,10 +16,12 @@
 		</div>
 		<div class="item">
 			<div id="input">
-				<img src="images/message.png">
-				<div class="highlighter"></div><textarea id="message" rows="4" cols="20"></textarea>
-				<div id='prediction'><span id='likes'>0 <img src="images/likes.png" class="likespic"></span></div>
-				<p class="text">will like this</p>
+				<div class='inputcontainer'>
+					<img src="images/message.png" border='0' /><br />
+					<div class="highlighter"></div><textarea id="message" rows="4" cols="20"></textarea>
+					<div id='prediction'><span id='likes'>0 <img src="images/likes.png" class="likespic"></span></div>
+					<p class="text">will like this</p>
+				</div>
 			</div>
 
 			<div id="wordcloud">
@@ -76,7 +78,7 @@
 	var friends = friends();
 	var data = testData();
 	var dataset = match(" ", data);
-	setNetwork(dataset.nonMatchingTerms);
+	setNetwork();
 	updateWordcloud(dataset.nonMatchingTerms);		
 </script>
 <script type="text/javascript" src="js/barchart.js"></script>

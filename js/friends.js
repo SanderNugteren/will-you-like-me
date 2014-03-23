@@ -27,7 +27,7 @@ function friends() {
 
 		var maxLinks = 0;
 		for (var j = 2; j < mutual_friends[i].length; j++) {
-			if(mutual_friends[i][j] in mutual_friends_list) {
+			if(mutual_friends[i][j] in mutual_friends_list && maxLinks < 1) {
 				clean_data[i][2].push(parseInt(mutual_friends[i][j]));
 				maxLinks++;
 			}
