@@ -77,7 +77,7 @@ function match(message, data) {
 			}
 		}
 		var postLength = dataset.terms.length;
-		console.log(postLength);
+		console.log(dataset.terms);
 		like += moreData[1][moreData[1].length-7] * postLength; // length
 		like += moreData[1][moreData[1].length-6] * 1.0; // night
 		like += moreData[1][moreData[1].length-5] * 0.0; // morning
