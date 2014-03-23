@@ -76,9 +76,15 @@ function match(message, data) {
 				like += moreData[1][j];
 			}
 		}
-		var postLength = dataset.terms.length;
-		console.log(dataset.terms);
-		like += moreData[1][moreData[1].length-7] * postLength; // length
+		var allTerms = dataset.terms.slice(0);
+		var wordCount = 0;
+		for (q in allTerms) {
+			if (allTerms[q] != "" && allTerms[q] != " " && allTerms[q] != "\n")
+				wordCount++;
+		}
+		console.log(allTerms);
+		console.log(wordCount);
+		like += moreData[1][moreData[1].length-7] * wordCount; // length
 		like += moreData[1][moreData[1].length-6] * 1.0; // night
 		like += moreData[1][moreData[1].length-5] * 0.0; // morning
 		like += moreData[1][moreData[1].length-4] * 0.0; // afternoon
