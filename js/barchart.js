@@ -35,13 +35,17 @@ function updateBarchart(dataset) {
 
 			var lowest = d3.min(dataset, function(d) { return d[1]; });
 			var min = 0;
-			if(dataset.length > 1) {
-				if(lowest < 0) {
+			if(lowest < 0) {
 					var min = lowest;
-				}
 			}
+			var highest = d3.max(dataset, function(d) { return d[1]; });
+			var max = 0;
+			if(highest > 0) {
+				var max = highest;
+			}
+			
 			xScale = d3.scale.linear()
-				.domain([min, d3.max(dataset, function(d) { return d[1]; })])
+				.domain([min, max])
 				.range([leftpadding, w - padding]);
 
 			yScale = d3.scale.linear()
@@ -80,7 +84,7 @@ function updateBarchart(dataset) {
 				})
 				.attr("width", function(d) {
 					if(d[1] < 0) {
-						return xScale(0) - leftpadding;
+						return xScale(min - d[1]) - leftpadding;
 					} else {
 						return xScale(d[1] - Math.abs(min)) - leftpadding;
 					}
