@@ -127,8 +127,8 @@ def turnUsernameIntoId(username):
 
 
 if __name__ == '__main__':
-    token = 'token'
-    username = 'username'
+    token = 'CAACEdEose0cBACYB565uVUz4W1uAlPAA2hxMAy9pKstJ7NnQ7mJMRsXvrjZBvZB8ZC532Q0zZCHZAw78kokWUUE6khgs7BCvZAYbG6WWQNIVdZCaAqZCLAmxKK7EbUac4kxAfGIDpSZCZBRbmOmI7FgZCJMSCnRFJ0s9jkGnzObyXGzGYjanOEr1XZAd0udYYdysqTGNpawY5tpMdAZDZD'
+    username = 'philip.anderson1'
     limit = 1000
     crawl(username, token, limit)
     #crawlFriends( username, token )

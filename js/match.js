@@ -92,6 +92,8 @@ function match(message, data) {
 		like += moreData[1][moreData[1].length-2] * 0.0; // Has link
 		like += moreData[1][moreData[1].length-1] * 1.0; // Has photo
 		likes = like;
+		if(likes < 0)
+			likes = 0;
 	}
 	
 	matchingTerms.sort(function(a,b) {

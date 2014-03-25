@@ -51,7 +51,7 @@ def preprocess(csvFile):
                     secs_since_midnight < 3600*24)*1.0)
             postHasLink.append((row[6] == 'link')*1.0)
             postHasPhoto.append((row[6] == 'photo')*1.0)
-        allWords = [i for i, v in allWordsCounting.most_common(40)]
+        allWords = [i for i, v in allWordsCounting.most_common(50)]
         allWords = allWords[10:]
         newHeader = allWords[:]
         # Can't forget about [:]! Otherwise the header is a pointer to allwords!

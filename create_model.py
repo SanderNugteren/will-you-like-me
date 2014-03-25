@@ -51,7 +51,8 @@ def build_model(csvFile):
     clf.fit(trainData, trainLikes)
     clfOutput.fit(data, likes)
     #print the results
-    #print 'clf coef. learned: \n', clf.coef_
+    print('header: ', header)
+    print('clf coef. learned: \n', clfOutput.coef_)
     print('predictions: \n', clf.predict(testData))
     print('actual data: \n', testLikes)
     print('Residual sum of squares: %.5f' % \
