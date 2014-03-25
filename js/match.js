@@ -54,7 +54,7 @@ function match(message, data) {
 		{
 			if(terms[j].toLowerCase() == moreData[0][moreData[0].length - 7 - i].toLowerCase()) {
 				match = true;
-				matchingTerms.push([terms[j],moreData[1][i],parseInt(j)]);
+				matchingTerms.push([terms[j],moreData[1][moreData[0].length - 7 - i],parseInt(j)]);
 				termCount++;
 		
 				// sum score for friend
