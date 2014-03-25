@@ -151,6 +151,7 @@ body{
 }
 #input .highlighter {
 	position: absolute;
+	top: 45px;
 	padding: 1px;
 	margin-left: 1px;
 	color: white;
