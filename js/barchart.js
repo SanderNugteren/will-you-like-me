@@ -36,7 +36,9 @@ function updateBarchart(dataset) {
 			var lowest = d3.min(dataset, function(d) { return d[1]; });
 			var min = 0;
 			if(dataset.length > 1) {
-				var min = lowest;
+				if(lowest < 0) {
+					var min = lowest;
+				}
 			}
 			xScale = d3.scale.linear()
 				.domain([min, d3.max(dataset, function(d) { return d[1]; })])
@@ -61,6 +63,7 @@ function updateBarchart(dataset) {
 			// bars
 			rects.enter().append("rect")
 				.attr("width", 0)
+				.attr("x", xScale(0))
 				.style("fill", function(d, i) { return fill(1); });
 		
 			rects.sort(function(a, b) {
@@ -69,10 +72,18 @@ function updateBarchart(dataset) {
 				.transition()
 				.duration(1000)
 				.attr("x", function(d, i) {
-					return leftpadding;
+					if(d[1] < 0) {
+						return xScale(d[1]);
+					} else {
+						return xScale(0);
+					}
 				})
 				.attr("width", function(d) {
-					return xScale(d[1]) - leftpadding;
+					if(d[1] < 0) {
+						return xScale(0) - leftpadding;
+					} else {
+						return xScale(d[1] - Math.abs(min)) - leftpadding;
+					}
 				})
 				.attr("y", function(d, i) {
 					return yScale(i) + barPadding;
@@ -92,7 +103,7 @@ function updateBarchart(dataset) {
 				
 			values.enter().append("text")
 				.attr("class", "value")
-				.attr("x", leftpadding - 20);
+				.attr("x", xScale(0));
 
 			values.sort(function(a, b) {
 					return d3.descending(a[1], b[1]);
@@ -103,7 +114,11 @@ function updateBarchart(dataset) {
 					return Math.round(d[1]);
 				})
 				.attr("x", function(d) {
-					return xScale(d[1]) - 30;
+					if(d[1] < 0) {
+						return xScale(d[1]) + 10;
+					} else {					
+						return xScale(d[1]) - 20;
+					}
 				})
 				.attr("y", function(d, i) { 
 					return yScale(i) + (h / dataset.length / 2) + 6;
