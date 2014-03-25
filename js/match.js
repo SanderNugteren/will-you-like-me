@@ -27,6 +27,13 @@ function match(message, data) {
 	var nonMatchingTerms = deepCopy(data);
 	var termScores = [0];
 	
+	var len = nonMatchingTerms[0].length;
+	for(i = nonMatchingTerms[0].length; i > len - 8; i--) {
+		for(j = 0; j < nonMatchingTerms.length; j++) {
+			nonMatchingTerms[j].splice(i,i);
+		}
+	}
+	
 	// push friend names into friendScores
 	var friendScores = [];
 	for(i = 1; i < data.length; i++)
@@ -37,34 +44,29 @@ function match(message, data) {
 	var moreData = likePrediction();
 	
 	// match terms to data
-	for(i = 1; i < moreData[0].length; i++)
+	for(i = 0; i <= moreData[0].length - 7; i++)
 	{
-		//get sum of prediction data for each term
-		var score = 0;
-		for(j = 1; j < moreData.length; j++) {
-			score += moreData[j][moreData[0].length - i];
-		}
-		termScores.push(score);
+		termScores.push(moreData[1][i]);
 
 		// get terms matching data
 		var match = false;
 		for(j in terms)
 		{
-			if(terms[j].toLowerCase() == data[0][data[0].length - i].toLowerCase()) {
+			if(terms[j].toLowerCase() == moreData[0][moreData[0].length - 7 - i].toLowerCase()) {
 				match = true;
-				matchingTerms.push([terms[j],termScores[i],parseInt(j)]);
+				matchingTerms.push([terms[j],moreData[1][i],parseInt(j)]);
 				termCount++;
 		
 				// sum score for friend
-				nonMatchingTerms[0].splice(data[0].length - i,1);
+				nonMatchingTerms[0].splice(moreData[0].length - 7 - i+1,1);
 				for(k = 1; k < data.length; k++) {
-					friendScores[data[k][0]].push(data[k][data[0].length - i]);
-					nonMatchingTerms[k].splice(data[0].length - i,1);
+					friendScores[data[k][0]] = data[k][moreData[0].length - 7 - i+1];
+					nonMatchingTerms[k].splice(moreData[0].length - 7 - i+1,1);
 				}
 			}
 		}
 	}
-	
+
 	// calculate scores for friends and total likes
 			// Not completely sure what this does:
 			// friendScores[i] = 1 - (like / friendScores[i].length);
@@ -76,14 +78,12 @@ function match(message, data) {
 				like += moreData[1][j];
 			}
 		}
-		var allTerms = dataset.terms.slice(0);
+		var allTerms = message.slice(0);
 		var wordCount = 0;
 		for (q in allTerms) {
 			if (allTerms[q] != "" && allTerms[q] != " " && allTerms[q] != "\n")
 				wordCount++;
 		}
-		console.log(allTerms);
-		console.log(wordCount);
 		like += moreData[1][moreData[1].length-7] * wordCount; // length
 		like += moreData[1][moreData[1].length-6] * 1.0; // night
 		like += moreData[1][moreData[1].length-5] * 0.0; // morning
