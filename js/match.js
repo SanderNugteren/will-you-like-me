@@ -89,8 +89,8 @@ function match(message, data) {
 		like += moreData[1][moreData[1].length-5] * 0.0; // morning
 		like += moreData[1][moreData[1].length-4] * 0.0; // afternoon
 		like += moreData[1][moreData[1].length-3] * 0.0; // evening
-		like += moreData[1][moreData[1].length-2] * 0.0; // Has link
-		like += moreData[1][moreData[1].length-1] * 1.0; // Has photo
+		like += moreData[1][moreData[1].length-2] * 1.0; // Has link
+		like += moreData[1][moreData[1].length-1] * 0.0; // Has photo
 		likes = like;
 		if(likes < 0)
 			likes = 0;

@@ -69,7 +69,8 @@ def crawlFriends( username, token ):
     while( True ):
 
         print("Processing friends...")
-        response = urllib.request.urlopen(url)
+        try: response = urllib.request.urlopen(url)
+        except NameError: response = urllib2.urlopen(url)
         content = response.read().decode(response.headers.get('Content-Type', '').split("=")[1])
         JSONdata = json.loads(content)
 		
@@ -131,6 +132,6 @@ if __name__ == '__main__':
     username = 'philip.anderson1'
     limit = 1000
     crawl(username, token, limit)
-    #crawlFriends( username, token )
+    crawlFriends( username, token )
     
 
