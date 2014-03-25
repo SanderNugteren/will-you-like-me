@@ -70,7 +70,11 @@ cloudScale = d3.scale.linear()
 					.text(function(d) { return d.text; })
 					.style("font-size", 1)
 					.on("click", function(k) {
-						$('#message').val($('#message').val() + " " + k.text);
+						if($('#message').val() == "") {
+							$('#message').val(k.text);
+						} else {
+							$('#message').val($('#message').val() + " " + k.text);
+						}
 						updateVisuals();
 					});
 			
