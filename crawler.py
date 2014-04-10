@@ -15,19 +15,17 @@ def crawl( username, token, limit ):
                         "Update Type","Link URL","Post URL"])
     
     # Create the URL needed
-    url = "https://graph.facebook.com/"+username+"/feed?limit="+str(limit)+"&fields=message,created_time,shares,from,comments.limit(1).summary(true),type,link,actions,likes.limit(1).summary(true)&access_token="+token
+    url = "https://graph.facebook.com/"+username+\
+        "/feed?limit="+str(limit)+\
+        "&fields=message,created_time,shares,from,comments.limit(1).summary(true),type,"+\
+        "link,actions,likes.limit(1).summary(true)&access_token="+token
     pageNum = 0
     while( True ):
         pageNum += 1
         print("Page "+ str(pageNum) +" being processed.")
-        try: response = urllib.request.urlopen(url)
-        except NameError: response = urllib2.urlopen(url)
-        #try: content = response.read().decode(response.headers.get_content_charset())
-        #except AttributeError: pass
-        content = response.read().decode('utf8')
-        
+        response = openURLsafely(url)
+        content = decodeContent(response)
         JSONdata = json.loads(content)
-
         # Open the data in this JSON file
         for statusUpdate in JSONdata["data"]:
             # Retrieve all the relevant data from this status update
@@ -69,8 +67,7 @@ def crawlFriends( username, token ):
     while( True ):
 
         print("Processing friends...")
-        try: response = urllib.request.urlopen(url)
-        except NameError: response = urllib2.urlopen(url)
+        response = openURLsafely(url)
         content = response.read().decode(response.headers.get('Content-Type', '').split("=")[1])
         JSONdata = json.loads(content)
 		
@@ -92,26 +89,36 @@ def crawlFriends( username, token ):
     csvWriter = csv.writer(csvFile, quotechar = '|')
     csvWriter.writerow(["friend_id","name","user_id"])
 	
-    # Using the friend id's of the user to get the friends of the users friends. THIS ONLY WORKS FOR PUBLIC PROFILES, unfortunately
+    # Using the friend id's of the user to get the friends of the users friends. 
+    # THIS ONLY WORKS FOR PUBLIC PROFILES, unfortunately
     for ids in range(len(friends_id_list)):
 	    
         # Try to get the friends of a friend 
         try:
             friends_url = "https://graph.facebook.com/"+friends_id_list[ids]+"/?fields=name,id,friends&access_token="+token
-            try: response = urllib2.urlopen(friends_url)
-            except NameError: response = urllib.request.urlopen(friends_url)
-            #try: content = response.read().decode(response.headers.get_content_charset())
-            #except AttributeError: pass
-            content = response.read().decode('utf8')
-            
+            response = openURLsafely(url)
+            content = decodeContent(response)            
+
             JSONfriendData = json.loads(content)
             # Add the friends to the friends of a friend (foaf) file
             for foaf in JSONfriendData["friends"]["data"]:
-                friend = foaf["name"].encode('ascii','ignore') # this fails (in windows command prompt, not in IDLE)when the string contains unicode that is unknown
+                friend = foaf["name"].encode('ascii','ignore') 
+                # this fails (in windows command prompt, not in IDLE)when the string contains unicode that is unknown
                 id = friends["id"]
                 csvWriter.writerow([id, friend,friends_id_list[ids]])
         except:
             pass
+
+def openURLsafely(URL):
+    try: response = urllib.request.urlopen(URL)
+    except NameError: response = urllib2.urlopen(URL)
+    return response
+
+def decodeContent(response):
+    # try: content = response.read().decode(response.headers.get_content_charset())
+    # except AttributeError: content = response.read().decode('utf8')
+    content = response.read().decode('utf8')
+    return content
 
 def extractNumber(category, statusUpdate):
     if category in statusUpdate: number = statusUpdate[category]["summary"]["total_count"]
@@ -120,18 +127,17 @@ def extractNumber(category, statusUpdate):
 
 def turnUsernameIntoId(username):
     url = "https://graph.facebook.com/"+username+"?fields=id"
-    try: response = urllib.request.urlopen(url)
-    except NameError: response = urllib2.urlopen(url)
+    response = openURLsafely(url)
     content = response.read().decode('utf8')
     JSONdata = json.loads(content)
     return JSONdata["id"]
 
 
 if __name__ == '__main__':
-    token = 'CAACEdEose0cBACYB565uVUz4W1uAlPAA2hxMAy9pKstJ7NnQ7mJMRsXvrjZBvZB8ZC532Q0zZCHZAw78kokWUUE6khgs7BCvZAYbG6WWQNIVdZCaAqZCLAmxKK7EbUac4kxAfGIDpSZCZBRbmOmI7FgZCJMSCnRFJ0s9jkGnzObyXGzGYjanOEr1XZAd0udYYdysqTGNpawY5tpMdAZDZD'
+    token = ''
     username = 'philip.anderson1'
     limit = 1000
     crawl(username, token, limit)
-    crawlFriends( username, token )
+    #crawlFriends( username, token )
     
 
